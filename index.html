@@ -96,6 +96,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:linear-gradient(180deg,#b8
 .cnt-total-card .cnt-name{font-size:11px;font-weight:700;color:#1a5a4a;margin-bottom:1px;}
 .cnt-total-card .cnt-num{font-size:28px;font-weight:700;color:#1a5a4a;line-height:1;}
 .cnt-total-card .cnt-label{font-size:10px;color:#4a7a70;}
+.cnt-total-of{font-size:0.55em;font-weight:500;color:#aaa;margin-left:1px;}
 
 /* 좌석 배치도 */
 .seat-map-section{max-width:680px;margin:14px auto 0;background:rgba(255,255,255,0.85);border-radius:16px;padding:14px 8px 16px;border:1px solid rgba(100,180,165,0.3);}
@@ -557,29 +558,29 @@ body{font-family:'Noto Sans KR',sans-serif;background:linear-gradient(180deg,#b8
 <div class="counting-section">
   <div class="cgl">사내</div>
   <div class="counting-box">
-    <div class="count-card"><div class="cnt-name" style="color:#5a0080;">김지온</div><div class="cnt-num" style="color:#5a0080;" id="cnt-jion">0</div><div class="cnt-label">회</div></div>
-    <div class="count-card"><div class="cnt-name" style="color:#003a6a;">원태민</div><div class="cnt-num" style="color:#003a6a;" id="cnt-taemin">0</div><div class="cnt-label">회</div></div>
-    <div class="count-card"><div class="cnt-name" style="color:#6a4000;">김찬종</div><div class="cnt-num" style="color:#6a4000;" id="cnt-chanchan">0</div><div class="cnt-label">회</div></div>
-    <div class="count-card"><div class="cnt-name" style="color:#7a0030;">유현석</div><div class="cnt-num" style="color:#7a0030;" id="cnt-yuhyun">0</div><div class="cnt-label">회</div></div>
+    <div class="count-card"><div class="cnt-name" style="color:#5a0080;">김지온</div><div class="cnt-num" style="color:#5a0080;"><span id="cnt-jion">0</span><span class="cnt-total-of">/12</span></div><div class="cnt-label">회 관람</div></div>
+    <div class="count-card"><div class="cnt-name" style="color:#003a6a;">원태민</div><div class="cnt-num" style="color:#003a6a;"><span id="cnt-taemin">0</span><span class="cnt-total-of">/13</span></div><div class="cnt-label">회 관람</div></div>
+    <div class="count-card"><div class="cnt-name" style="color:#6a4000;">김찬종</div><div class="cnt-num" style="color:#6a4000;"><span id="cnt-chanchan">0</span><span class="cnt-total-of">/16</span></div><div class="cnt-label">회 관람</div></div>
+    <div class="count-card"><div class="cnt-name" style="color:#7a0030;">유현석</div><div class="cnt-num" style="color:#7a0030;"><span id="cnt-yuhyun">0</span><span class="cnt-total-of">/13</span></div><div class="cnt-label">회 관람</div></div>
   </div>
   <div class="cgl">김우진</div>
   <div class="counting-box">
-    <div class="count-card"><div class="cnt-name" style="color:#1a5a1a;">선한국</div><div class="cnt-num" style="color:#1a5a1a;" id="cnt-seonhankook">0</div><div class="cnt-label">회</div></div>
-    <div class="count-card"><div class="cnt-name" style="color:#5a1a5a;">온주완</div><div class="cnt-num" style="color:#5a1a5a;" id="cnt-onjuwan">0</div><div class="cnt-label">회</div></div>
-    <div class="count-card"><div class="cnt-name" style="color:#1a2a6a;">이진혁</div><div class="cnt-num" style="color:#1a2a6a;" id="cnt-leejinhyuk">0</div><div class="cnt-label">회</div></div>
-    <div class="count-card"><div class="cnt-name" style="color:#5a3a1a;">임준혁</div><div class="cnt-num" style="color:#5a3a1a;" id="cnt-limjunhyuk">0</div><div class="cnt-label">회</div></div>
+    <div class="count-card"><div class="cnt-name" style="color:#1a5a1a;">선한국</div><div class="cnt-num" style="color:#1a5a1a;"><span id="cnt-seonhankook">0</span><span class="cnt-total-of">/13</span></div><div class="cnt-label">회 관람</div></div>
+    <div class="count-card"><div class="cnt-name" style="color:#5a1a5a;">온주완</div><div class="cnt-num" style="color:#5a1a5a;"><span id="cnt-onjuwan">0</span><span class="cnt-total-of">/14</span></div><div class="cnt-label">회 관람</div></div>
+    <div class="count-card"><div class="cnt-name" style="color:#1a2a6a;">이진혁</div><div class="cnt-num" style="color:#1a2a6a;"><span id="cnt-leejinhyuk">0</span><span class="cnt-total-of">/13</span></div><div class="cnt-label">회 관람</div></div>
+    <div class="count-card"><div class="cnt-name" style="color:#5a3a1a;">임준혁</div><div class="cnt-num" style="color:#5a3a1a;"><span id="cnt-limjunhyuk">0</span><span class="cnt-total-of">/14</span></div><div class="cnt-label">회 관람</div></div>
   </div>
   <div class="cgl">윤심덕</div>
   <div class="counting-box">
-    <div class="count-card"><div class="cnt-name" style="color:#7a1060;">정우연</div><div class="cnt-num" style="color:#7a1060;" id="cnt-jungwooyeon">0</div><div class="cnt-label">회</div></div>
-    <div class="count-card"><div class="cnt-name" style="color:#1a5a3a;">여은</div><div class="cnt-num" style="color:#1a5a3a;" id="cnt-yeoeun">0</div><div class="cnt-label">회</div></div>
-    <div class="count-card"><div class="cnt-name" style="color:#6a2a00;">최연우</div><div class="cnt-num" style="color:#6a2a00;" id="cnt-choiyeonwoo">0</div><div class="cnt-label">회</div></div>
-    <div class="count-card"><div class="cnt-name" style="color:#002a6a;">김수연</div><div class="cnt-num" style="color:#002a6a;" id="cnt-kimsuyeon">0</div><div class="cnt-label">회</div></div>
+    <div class="count-card"><div class="cnt-name" style="color:#7a1060;">정우연</div><div class="cnt-num" style="color:#7a1060;"><span id="cnt-jungwooyeon">0</span><span class="cnt-total-of">/16</span></div><div class="cnt-label">회 관람</div></div>
+    <div class="count-card"><div class="cnt-name" style="color:#1a5a3a;">여은</div><div class="cnt-num" style="color:#1a5a3a;"><span id="cnt-yeoeun">0</span><span class="cnt-total-of">/15</span></div><div class="cnt-label">회 관람</div></div>
+    <div class="count-card"><div class="cnt-name" style="color:#6a2a00;">최연우</div><div class="cnt-num" style="color:#6a2a00;"><span id="cnt-choiyeonwoo">0</span><span class="cnt-total-of">/16</span></div><div class="cnt-label">회 관람</div></div>
+    <div class="count-card"><div class="cnt-name" style="color:#002a6a;">김수연</div><div class="cnt-num" style="color:#002a6a;"><span id="cnt-kimsuyeon">0</span><span class="cnt-total-of">/7</span></div><div class="cnt-label">회 관람</div></div>
   </div>
   <div class="cnt-total-box">
     <div class="cnt-total-card">
       <div class="cnt-name">합계</div>
-      <div class="cnt-num" id="cnt-total">0</div>
+      <div class="cnt-num"><span id="cnt-total">0</span><span class="cnt-total-of" style="color:#4a7a70;">/54</span></div>
       <div class="cnt-label">회 관람</div>
     </div>
   </div>
