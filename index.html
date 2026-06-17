@@ -54,11 +54,21 @@ body{font-family:'Noto Sans KR',sans-serif;background:linear-gradient(180deg,#b8
 .cell.date{font-weight:700;font-size:10px;text-align:left;line-height:1.3;}
 .day-sat{color:#0060a0;font-weight:700;}.day-sun{color:#c02020;font-weight:700;}.day-wkd{color:#4a6a60;}
 .cell.time{font-size:9px;color:#4a6a60;}
-.sinae{font-size:9.5px;font-weight:700;padding:1px 4px;border-radius:6px;display:inline-block;}
+.sinae{font-size:10px;font-weight:700;padding:1px 4px;border-radius:6px;display:inline-block;}
 .sinae-jion{background:#e8d5f5;color:#5a0080;}
 .sinae-taemin{background:#cce8f4;color:#003a6a;}
 .sinae-chanchan{background:#fff0cc;color:#6a4000;}
 .sinae-yuhyun{background:#ffe0e8;color:#7a0030;}
+/* 김우진·윤심덕 역 배우 배지 */
+.actor-badge{font-size:10px;font-weight:700;padding:1px 4px;border-radius:6px;display:inline-block;line-height:1.4;}
+.badge-seonhankook{background:#d4edd4;color:#1a5a1a;}
+.badge-onjuwan    {background:#edd4ed;color:#5a1a5a;}
+.badge-leejinhyuk {background:#d4ddf0;color:#1a2a6a;}
+.badge-limjunhyuk {background:#f0e8d4;color:#5a3a1a;}
+.badge-jungwooyeon{background:#fde4f4;color:#7a1060;}
+.badge-yeoeun     {background:#d4f0e4;color:#1a5a3a;}
+.badge-choiyeonwoo{background:#f4e4d4;color:#6a2a00;}
+.badge-kimsuyeon  {background:#d4e4f8;color:#002a6a;}
 .month-divider{padding:6px 8px;background:rgba(30,110,90,0.18);font-size:11px;font-weight:700;color:#1a5a4a;text-align:center;letter-spacing:2px;border-top:1px solid rgba(100,180,165,0.3);}
 .no-show{padding:5px 8px;background:rgba(200,200,200,0.18);font-size:10px;color:#999;text-align:center;border-top:1px solid rgba(100,180,165,0.12);font-style:italic;}
 .fb{display:inline-block;background:#5ecfb8;color:white;font-size:7.5px;font-weight:700;padding:1px 4px;border-radius:10px;margin-left:2px;vertical-align:middle;}
@@ -126,6 +136,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:linear-gradient(180deg,#b8
   .row{grid-template-columns:92px 36px 52px 1fr 1fr 1fr 110px;padding:8px 12px;gap:4px;}
   .cell{font-size:12px;}.cell.date{font-size:12px;}.cell.time{font-size:11px;}
   .sinae{font-size:12px;padding:2px 7px;}
+  .actor-badge{font-size:12px;padding:2px 7px;}
   .fb{font-size:10px;padding:2px 6px;}
   .month-divider{font-size:13px;}
   .no-show{font-size:12px;}
@@ -851,6 +862,28 @@ document.querySelectorAll('.seat-input').forEach(inp=>{
 buildMap();
 Object.keys(showSeats).forEach(sid=>renderTags(sid));
 updateMap();updateCounting();
+
+// 김우진·윤심덕 배우 이름에 배지 적용
+const WUJIN_BADGE={seonhankook:'badge-seonhankook',onjuwan:'badge-onjuwan',leejinhyuk:'badge-leejinhyuk',limjunhyuk:'badge-limjunhyuk'};
+const SHIM_BADGE ={jungwooyeon:'badge-jungwooyeon',yeoeun:'badge-yeoeun',choiyeonwoo:'badge-choiyeonwoo',kimsuyeon:'badge-kimsuyeon'};
+document.querySelectorAll('.row[data-sid]').forEach(r=>{
+  const cells=r.querySelectorAll('.cell:not(.date):not(.time):not(.seat-cell)');
+  // cells[0]=요일, cells[1]=김우진, cells[2]=윤심덕 (day 클래스 제외하고)
+  // data 속성으로 정확히 접근
+  const wk=r.dataset.wujin, sk=r.dataset.shim;
+  // 김우진 셀 = 4번째 .cell (date/day/time/wujin/shim/sinae 순)
+  const allCells=r.querySelectorAll('.cell');
+  // allCells: [date, day, time, wujin, shim, sinae, seat-cell]
+  const wujinCell=allCells[3], shimCell=allCells[4];
+  if(wujinCell && WUJIN_BADGE[wk]){
+    const txt=wujinCell.innerHTML;
+    wujinCell.innerHTML=`<span class="actor-badge ${WUJIN_BADGE[wk]}">${txt}</span>`;
+  }
+  if(shimCell && SHIM_BADGE[sk]){
+    const txt=shimCell.innerHTML;
+    shimCell.innerHTML=`<span class="actor-badge ${SHIM_BADGE[sk]}">${txt}</span>`;
+  }
+});
 
 // 고정 상태 복원
 if(pinnedSel){
