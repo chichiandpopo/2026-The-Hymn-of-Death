@@ -744,26 +744,19 @@ function copyCast(sid){
   const day=row.querySelector('.cell.day')?.textContent.trim()||'';
   const time=row.querySelector('.cell.time')?.textContent.trim()||'';
   const eventTag=dateCell.querySelector('.event-tag')?.textContent.trim().replace(/^\S+\s/,'').trim()||'';
-  // 배우이름: 각 셀에서 텍스트만 (fb 태그, 배지 제외)
-  function actorName(cell){
-    if(!cell)return'';
-    return [...cell.childNodes].filter(n=>n.nodeType===3||(n.nodeType===1&&!n.classList.contains('fb')&&!n.classList.contains('actor-badge')&&!n.classList.contains('sinae')&&!n.classList.contains('jg-badge')&&!n.classList.contains('event-tag'))).map(n=>{
-      if(n.nodeType===3)return n.textContent.trim();
-      // span.sinae 안의 텍스트
-      return '';
-    }).join('').trim();
-  }
-  // sinae 배우 이름만 (fb 제외)
-  function sinaeName(cell){
-    const sinae=cell?.querySelector('.sinae');
-    if(!sinae)return'';
-    return [...sinae.childNodes].filter(n=>n.nodeType===3).map(n=>n.textContent.trim()).join('').trim();
-  }
-  const allCells=[...row.querySelectorAll('.cell:not(.date):not(.seat-cell)')].filter(c=>!c.querySelector('.copy-btn'));
-  const wujin=actorName(allCells[1]);
-  const shim=actorName(allCells[2]);
-  const sinae=sinaeName(allCells[3]);
-  let text=`뮤지컬 사의찬미\n${date} (${day}) ${time}\n${wujin} / ${shim} / ${sinae}`;
+
+  // data-wujin, data-shim, data-type으로 배우 키 가져오기
+  const wujinKey=row.dataset.wujin||'';
+  const shimKey=row.dataset.shim||'';
+  const sinaeName=row.querySelector('.sinae')?.childNodes[0]?.textContent.trim()||'';
+
+  // 키 → 한글 이름 변환
+  const ACTOR={seonhankook:'선한국',onjuwan:'온주완',leejinhyuk:'이진혁',limjunhyuk:'임준혁',
+    jungwooyeon:'정우연',yeoeun:'여은',choiyeonwoo:'최연우',kimsuyeon:'김수연'};
+  const wujin=ACTOR[wujinKey]||wujinKey;
+  const shim=ACTOR[shimKey]||shimKey;
+
+  let text=`뮤지컬 사의찬미\n${date} (${day}) ${time}\n${wujin} / ${shim} / ${sinaeName}`;
   if(eventTag) text+=`\n${eventTag}`;
   const btn=row.querySelector('.copy-btn');
   navigator.clipboard.writeText(text).then(()=>{
