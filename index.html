@@ -846,21 +846,53 @@ function importData(e){
 function saveSeats(){localStorage.setItem('sauichanmi_seats_v3',JSON.stringify(showSeats));}
 
 function updateCounting(){
-  // 전체 초기화
   const keys=['jion','taemin','chanchan','yuhyun','seonhankook','onjuwan','leejinhyuk','limjunhyuk','jungwooyeon','yeoeun','choiyeonwoo','kimsuyeon'];
   const cnt={};keys.forEach(k=>cnt[k]=0);
   let total=0;
+  const isAll=!sel.sinae&&!sel.wujin&&!sel.shim;
+
   Object.keys(showSeats).forEach(sid=>{
-    if((showSeats[sid]||[]).length>0 && SHOW_INFO[sid]){
-      const info=SHOW_INFO[sid];
-      cnt[info.type]=(cnt[info.type]||0)+1;
-      cnt[info.wujin]=(cnt[info.wujin]||0)+1;
-      cnt[info.shim]=(cnt[info.shim]||0)+1;
-      total++;
-    }
+    if((showSeats[sid]||[]).length===0||!SHOW_INFO[sid])return;
+    const info=SHOW_INFO[sid];
+    // 현재 필터와 맞는 공연만 카운팅
+    if(sel.sinae && info.type!==sel.sinae)return;
+    if(sel.wujin && info.wujin!==sel.wujin)return;
+    if(sel.shim  && info.shim!==sel.shim) return;
+    cnt[info.type]=(cnt[info.type]||0)+1;
+    cnt[info.wujin]=(cnt[info.wujin]||0)+1;
+    cnt[info.shim]=(cnt[info.shim]||0)+1;
+    total++;
   });
-  keys.forEach(k=>{const el=document.getElementById('cnt-'+k);if(el)el.textContent=cnt[k]||0;});
+
+  const sinaeKeys=['jion','taemin','chanchan','yuhyun'];
+  const wujinKeys=['seonhankook','onjuwan','leejinhyuk','limjunhyuk'];
+  const shimKeys=['jungwooyeon','yeoeun','choiyeonwoo','kimsuyeon'];
+
+  keys.forEach(k=>{
+    const el=document.getElementById('cnt-'+k);if(!el)return;
+    el.textContent=cnt[k]||0;
+    const card=el.closest('.count-card');if(!card)return;
+    if(isAll){card.style.opacity='';return;}
+    // 선택된 필터와 관련 있는 카드만 밝게
+    let relevant=false;
+    if(sel.sinae && k===sel.sinae) relevant=true;
+    if(sel.wujin && k===sel.wujin) relevant=true;
+    if(sel.shim  && k===sel.shim)  relevant=true;
+    if(!sel.sinae && sinaeKeys.includes(k)) relevant=true;
+    if(!sel.wujin && wujinKeys.includes(k)) relevant=true;
+    if(!sel.shim  && shimKeys.includes(k))  relevant=true;
+    card.style.opacity=relevant?'':'0.3';
+  });
+
   document.getElementById('cnt-total').textContent=total;
+
+  // 정산 제목 업데이트
+  const parts=[];
+  if(sel.sinae)parts.push(LABELS[sel.sinae]);
+  if(sel.wujin)parts.push(LABELS[sel.wujin]);
+  if(sel.shim) parts.push(LABELS[sel.shim]);
+  const titleEl=document.querySelector('.settle-title');
+  if(titleEl)titleEl.textContent=parts.length?`✨ ${parts.join(' · ')} 정산 ✨`:'✨ 2026 사의찬미 정산 ✨';
 }
 
 function buildMap(){
@@ -888,7 +920,18 @@ window.addEventListener('resize',()=>{buildMap();updateMap();});
 function updateMap(){
   document.querySelectorAll('.seat').forEach(el=>el.className='seat');
   const cnt={};
-  Object.values(showSeats).forEach(seats=>seats.forEach(s=>{cnt[s]=(cnt[s]||0)+1;}));
+  const isAll=!sel.sinae&&!sel.wujin&&!sel.shim;
+  Object.keys(showSeats).forEach(sid=>{
+    if(!(showSeats[sid]||[]).length||!SHOW_INFO[sid])return;
+    const info=SHOW_INFO[sid];
+    // 필터에 맞는 공연만
+    if(!isAll){
+      if(sel.sinae && info.type!==sel.sinae)return;
+      if(sel.wujin && info.wujin!==sel.wujin)return;
+      if(sel.shim  && info.shim!==sel.shim) return;
+    }
+    showSeats[sid].forEach(s=>{cnt[s]=(cnt[s]||0)+1;});
+  });
   Object.keys(cnt).forEach(key=>{
     const el=document.getElementById('S-'+key);
     if(el){el.classList.add('mk'+Math.min(cnt[key],5));el.title=key+' ('+cnt[key]+'회)';}
@@ -1039,6 +1082,8 @@ function applyFilter(){
   if(sel.shim)  parts.push(LABELS[sel.shim]);
   document.getElementById('countInfo').textContent=(parts.length?parts.join(' · '):'전체')+' '+visible+'회';
 
+  updateCounting();
+  updateMap();
   renderPinBar();
 }
 
