@@ -110,11 +110,11 @@ body{font-family:'Noto Sans KR',sans-serif;background:linear-gradient(180deg,#b8
 .row-label{font-size:8px;font-weight:700;color:#4a7a70;flex-shrink:0;text-align:center;}
 .seat-ph{flex-shrink:0;}
 .seat{border-radius:2px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:#f0f0f0;color:#aaa;border:1px solid #ddd;}
-.seat.mk1{background:#ff6b9d!important;color:white!important;border-color:#c0004a!important;}
-.seat.mk2{background:#6b9dff!important;color:white!important;border-color:#003acc!important;}
-.seat.mk3{background:#ffa040!important;color:white!important;border-color:#c05000!important;}
-.seat.mk4{background:#a040ff!important;color:white!important;border-color:#6000c0!important;}
-.seat.mk5{background:#40c060!important;color:white!important;border-color:#006020!important;}
+.seat.mk1{background:#ff6b9d!important;color:white!important;border-color:#c0004a!important;flex:1!important;}
+.seat.mk2{background:#6b9dff!important;color:white!important;border-color:#003acc!important;flex:1!important;}
+.seat.mk3{background:#ffa040!important;color:white!important;border-color:#c05000!important;flex:1!important;}
+.seat.mk4{background:#a040ff!important;color:white!important;border-color:#6000c0!important;flex:1!important;}
+.seat.mk5{background:#40c060!important;color:white!important;border-color:#006020!important;flex:1!important;}
 .seat-legend{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:10px;font-size:11px;}
 .seat-legend-item{display:flex;align-items:center;gap:4px;color:#1a3a35;}
 .seat-legend-dot{width:10px;height:10px;border-radius:2px;display:inline-block;}
@@ -1086,14 +1086,34 @@ function buildMap(){
   const gap=1;
   const sz=Math.max(8,Math.floor((availW-labelW*2-gap*maxCols)/maxCols));
   const fontSize=Math.max(4,Math.floor(sz*0.42));
+
   Object.keys(SEATS).forEach(row=>{
-    const rowEl=document.createElement('div');rowEl.className='seat-row';
-    const ll=document.createElement('div');ll.className='row-label';ll.style.width=labelW+'px';ll.textContent=row;rowEl.appendChild(ll);
+    const rowEl=document.createElement('div');
+    rowEl.className='seat-row';
+    rowEl.style.cssText='display:flex;align-items:center;margin-bottom:1px;width:100%;';
+
+    const ll=document.createElement('div');ll.className='row-label';ll.style.cssText=`width:${labelW}px;flex-shrink:0;font-size:8px;font-weight:700;color:#4a7a70;text-align:center;`;ll.textContent=row;rowEl.appendChild(ll);
+
+    // 내부 셀들을 감싸는 flex 컨테이너 (100% 너비 차지)
+    const inner=document.createElement('div');
+    inner.style.cssText='display:flex;flex:1;gap:1px;';
+
     SEATS[row].forEach(n=>{
-      if(n===null){const ph=document.createElement('div');ph.className='seat-ph';ph.style.width=sz+'px';ph.style.height=sz+'px';rowEl.appendChild(ph);}
-      else{const s=document.createElement('div');s.className='seat';s.id='S-'+row+'-'+n;s.style.width=sz+'px';s.style.height=sz+'px';s.style.fontSize=fontSize+'px';s.textContent=n;rowEl.appendChild(s);}
+      if(n===null){
+        const ph=document.createElement('div');
+        ph.style.cssText=`flex:1;height:${sz}px;`;
+        inner.appendChild(ph);
+      }else{
+        const s=document.createElement('div');
+        s.className='seat';s.id='S-'+row+'-'+n;
+        s.style.cssText=`flex:1;height:${sz}px;font-size:${fontSize}px;border-radius:2px;font-weight:700;display:flex;align-items:center;justify-content:center;background:#f0f0f0;color:#aaa;border:1px solid #ddd;`;
+        s.textContent=n;
+        inner.appendChild(s);
+      }
     });
-    const rl=document.createElement('div');rl.className='row-label';rl.style.width=labelW+'px';rl.textContent=row;rowEl.appendChild(rl);
+    rowEl.appendChild(inner);
+
+    const rl=document.createElement('div');rl.className='row-label';rl.style.cssText=`width:${labelW}px;flex-shrink:0;font-size:8px;font-weight:700;color:#4a7a70;text-align:center;`;rl.textContent=row;rowEl.appendChild(rl);
     wrap.appendChild(rowEl);
   });
 }
