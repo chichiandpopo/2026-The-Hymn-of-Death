@@ -1163,24 +1163,29 @@ function copyCast(sid){
   const row=document.querySelector(`.row[data-sid="${sid}"]`);
   if(!row)return;
   const dateCell=row.querySelector('.cell.date');
-  const date=[...dateCell.childNodes].filter(n=>n.nodeType===3).map(n=>n.textContent.trim()).join('').trim();
+
+  // 날짜: "8월 19일" → "8/19" 형식으로 변환
+  const dateRaw=[...dateCell.childNodes].filter(n=>n.nodeType===3).map(n=>n.textContent.trim()).join('').trim();
+  const dateShort=dateRaw.replace(/(\d+)월\s*(\d+)일/,'$1/$2');
+
   const day=row.querySelector('.cell.day')?.textContent.trim()||'';
   const time=row.querySelector('.cell.time')?.textContent.trim()||'';
-  const eventTag=dateCell.querySelector('.event-tag')?.textContent.trim().replace(/^\S+\s/,'').trim()||'';
 
-  // data-wujin, data-shim, data-type으로 배우 키 가져오기
-  const wujinKey=row.dataset.wujin||'';
-  const shimKey=row.dataset.shim||'';
-  const sinaeName=row.querySelector('.sinae')?.childNodes[0]?.textContent.trim()||'';
+  // 이벤트 태그 전부 (여러 개일 수 있음) - 이모티콘 제외 텍스트
+  const eventTags=[...dateCell.querySelectorAll('.event-tag')]
+    .map(el=>el.textContent.trim().replace(/^\S+\s/,'').trim())
+    .filter(Boolean);
 
-  // 키 → 한글 이름 변환
+  // 배우 이름만 (배역명 제외), 스페이스로 구분
   const ACTOR={seonhankook:'선한국',onjuwan:'온주완',leejinhyuk:'이진혁',limjunhyuk:'임준혁',
     jungwooyeon:'정우연',yeoeun:'여은',choiyeonwoo:'최연우',kimsuyeon:'김수연'};
-  const wujin=ACTOR[wujinKey]||wujinKey;
-  const shim=ACTOR[shimKey]||shimKey;
+  const wujin=ACTOR[row.dataset.wujin]||row.dataset.wujin||'';
+  const shim=ACTOR[row.dataset.shim]||row.dataset.shim||'';
+  const sinae=row.querySelector('.sinae')?.childNodes[0]?.textContent.trim()||'';
 
-  let text=`뮤지컬 사의찬미\n${date} (${day}) ${time}\n${wujin} / ${shim} / ${sinaeName}`;
-  if(eventTag) text+=`\n${eventTag}`;
+  let text=`뮤지컬 사의찬미\n${dateShort} ${day} ${time}\n${wujin} ${shim} ${sinae}`;
+  if(eventTags.length) text+='\n'+eventTags.join('\n');
+
   const btn=row.querySelector('.copy-btn');
   navigator.clipboard.writeText(text).then(()=>{
     if(btn){btn.textContent='✅';btn.classList.add('copied');setTimeout(()=>{btn.textContent='🌊';btn.classList.remove('copied');},1500);}
