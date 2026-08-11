@@ -154,12 +154,15 @@ body{font-family:'Noto Sans KR',sans-serif;background:linear-gradient(180deg,#b8
   .cgl{font-size:12px;}
   .event-tag{font-size:10px;}.jg-badge{font-size:10px;}
 }
-.archive-btn{position:fixed;top:14px;right:14px;z-index:999;background:rgba(255,255,255,0.85);border:1px solid rgba(100,180,165,0.5);border-radius:20px;padding:6px 12px;font-size:11px;font-weight:700;color:#1a5a4a;text-decoration:none;backdrop-filter:blur(6px);box-shadow:0 2px 8px rgba(100,180,165,0.2);white-space:nowrap;}
-.archive-btn:hover{background:white;}
+
+
+.save-btn{position:fixed;top:50px;right:14px;z-index:999;background:rgba(255,255,255,0.85);border:1px solid rgba(100,180,165,0.5);border-radius:20px;padding:6px 12px;font-size:11px;font-weight:700;color:#1a5a4a;text-decoration:none;backdrop-filter:blur(6px);box-shadow:0 2px 8px rgba(100,180,165,0.2);white-space:nowrap;cursor:pointer;font-family:'Noto Sans KR',sans-serif;}
+.save-btn:hover{background:white;}
 </style>
 </head>
 <body>
 <a href="https://chichiandpopo.github.io/stage_archive/" target="_blank" class="archive-btn">🎭 관극 아카이브</a>
+<button class="save-btn" onclick="saveAsImage()">💾 정산판 저장</button>
 
 <div class="logo-area">
   <div class="musical-label">MUSICAL</div>
@@ -944,6 +947,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:linear-gradient(180deg,#b8
   </label>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
 const SEATS={
   // A~Q: 모두 앞에 null 1개 추가 (오른쪽으로 1칸)
@@ -1078,6 +1082,54 @@ function updateCounting(){
   if(sel.shim) parts.push(LABELS[sel.shim]);
   const titleEl=document.querySelector('.settle-title');
   if(titleEl)titleEl.textContent='✨ 2026 사의찬미 정산 ✨';
+}
+
+function saveAsImage(){
+  // 정산 영역: settle-title부터 seat-map-section까지 감싸는 wrapper 생성
+  const settle=document.querySelector('.settle-title');
+  const seatMap=document.querySelector('.seat-map-section');
+  if(!settle||!seatMap){alert('정산 영역을 찾을 수 없어요!');return;}
+
+  const btn=document.querySelector('.save-btn');
+  const origText=btn.textContent;
+  btn.textContent='⏳ 저장 중...';
+  btn.disabled=true;
+
+  // 임시 wrapper로 캡처할 영역 감싸기
+  const wrapper=document.createElement('div');
+  wrapper.style.cssText='background:linear-gradient(180deg,#b8e8e0 0%,#d4f0eb 30%,#e8f8f5 60%,#c8e8e8 100%);padding:20px 16px 24px;display:inline-block;min-width:320px;';
+
+  // settle-title ~ seat-map-section 사이 노드들 복제
+  const clone=document.createElement('div');
+  let node=settle;
+  while(node){
+    clone.appendChild(node.cloneNode(true));
+    if(node===seatMap) break;
+    node=node.nextElementSibling;
+  }
+  wrapper.appendChild(clone);
+  document.body.appendChild(wrapper);
+
+  html2canvas(wrapper,{
+    scale:2,
+    useCORS:true,
+    backgroundColor:null,
+    logging:false,
+  }).then(canvas=>{
+    document.body.removeChild(wrapper);
+    const link=document.createElement('a');
+    link.download='사의찬미_정산.jpg';
+    link.href=canvas.toDataURL('image/jpeg',0.95);
+    link.click();
+    btn.textContent=origText;
+    btn.disabled=false;
+  }).catch(err=>{
+    document.body.removeChild(wrapper);
+    console.error(err);
+    btn.textContent=origText;
+    btn.disabled=false;
+    alert('저장 중 오류가 발생했어요 ㅠㅠ');
+  });
 }
 
 function buildMap(){
