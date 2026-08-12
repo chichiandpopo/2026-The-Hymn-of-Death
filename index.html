@@ -51,8 +51,6 @@ body{font-family:'Noto Sans KR',sans-serif;background:linear-gradient(180deg,#b8
 .table-header{display:grid;grid-template-columns:60px 22px 36px 1fr 1fr 1fr 68px 24px;background:rgba(30,110,90,0.14);padding:7px 5px;gap:2px;align-items:center;}
 .th{font-size:9.5px;font-weight:700;color:#1a5a4a;text-align:center;}
 .row{display:grid;grid-template-columns:60px 22px 36px 1fr 1fr 1fr 68px 24px;padding:5px 5px;gap:2px;border-top:1px solid rgba(100,180,165,0.2);align-items:start;}
-.archive-btn{position:fixed;top:14px;right:14px;z-index:999;background:rgba(255,255,255,0.85);border:1px solid rgba(100,180,165,0.5);border-radius:20px;padding:6px 12px;font-size:11px;font-weight:700;color:#1a5a4a;text-decoration:none;backdrop-filter:blur(6px);box-shadow:0 2px 8px rgba(100,180,165,0.2);white-space:nowrap;}
-.archive-btn:hover{background:white;}
 .row.hidden{display:none;}
 .cell{font-size:10px;color:#1a3a35;text-align:center;}
 .cell.date{font-weight:700;font-size:10px;text-align:left;line-height:1.3;}
@@ -156,13 +154,9 @@ body{font-family:'Noto Sans KR',sans-serif;background:linear-gradient(180deg,#b8
 }
 
 
-.save-btn{position:fixed;top:50px;right:14px;z-index:999;background:rgba(255,255,255,0.85);border:1px solid rgba(100,180,165,0.5);border-radius:20px;padding:6px 12px;font-size:11px;font-weight:700;color:#1a5a4a;text-decoration:none;backdrop-filter:blur(6px);box-shadow:0 2px 8px rgba(100,180,165,0.2);white-space:nowrap;cursor:pointer;font-family:'Noto Sans KR',sans-serif;}
-.save-btn:hover{background:white;}
 </style>
 </head>
 <body>
-<a href="https://chichiandpopo.github.io/stage_archive/" target="_blank" class="archive-btn">🎭 관극 아카이브</a>
-<button class="save-btn" onclick="saveAsImage()">💾 정산판 저장</button>
 
 <div class="logo-area">
   <div class="musical-label">MUSICAL</div>
@@ -947,6 +941,10 @@ body{font-family:'Noto Sans KR',sans-serif;background:linear-gradient(180deg,#b8
   </label>
 </div>
 
+<div style="max-width:680px;margin:8px auto 0;display:flex;justify-content:center;">
+  <a href="https://chichiandpopo.github.io/stage_archive/" target="_blank" style="padding:5px 14px;background:rgba(255,255,255,0.7);border:1px solid rgba(100,180,165,0.5);border-radius:20px;font-size:11px;font-weight:700;color:#1a5a4a;text-decoration:none;">🎭 관극 아카이브</a>
+</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
 const SEATS={
@@ -1016,7 +1014,7 @@ function updateCounting(){
   const totCnt={}; // 전체 공연 횟수 (필터 기준)
   keys.forEach(k=>{cnt[k]=0;totCnt[k]=0;});
   let total=0, totTotal=0;
-  const isAll=!sel.sinae&&!sel.wujin&&!sel.shim;
+  const isAll=isAllEmpty();
 
   // 전체 공연 목록에서 필터에 맞는 공연의 전체 횟수 계산
   document.querySelectorAll('.row[data-sid]').forEach(r=>{
@@ -1177,7 +1175,7 @@ window.addEventListener('resize',()=>{buildMap();updateMap();});
 function updateMap(){
   document.querySelectorAll('.seat').forEach(el=>el.className='seat');
   const cnt={};
-  const isAll=!sel.sinae&&!sel.wujin&&!sel.shim;
+  const isAll=isAllEmpty();
   Object.keys(showSeats).forEach(sid=>{
     if(!(showSeats[sid]||[]).length||!SHOW_INFO[sid])return;
     const info=SHOW_INFO[sid];
@@ -1283,49 +1281,59 @@ const LABELS={all:'전체',jion:'김지온',taemin:'원태민',chanchan:'김찬�
   jungwooyeon:'정우연',yeoeun:'여은',choiyeonwoo:'최연우',kimsuyeon:'김수연'};
 
 // 현재 선택 상태: 역할별 선택값 (null = 선택 없음)
-let sel={sinae:null, wujin:null, shim:null};
+// sel: 각 역할별 선택된 배우 키의 Set (여러 명 선택 가능)
+let sel={sinae:new Set(), wujin:new Set(), shim:new Set()};
 
 // 고정된 선택 상태
-let pinnedSel=JSON.parse(localStorage.getItem('sauichanmi_pin_v2')||'null');
+let pinnedSel=JSON.parse(localStorage.getItem('sauichanmi_pin_v3')||'null');
 
-// 역할별 같은 그룹에서 하나만 선택되도록 토글
+// sel → 직렬화 (localStorage 저장용)
+function selToObj(){
+  return {sinae:[...sel.sinae],wujin:[...sel.wujin],shim:[...sel.shim]};
+}
+function objToSel(obj){
+  return {sinae:new Set(obj.sinae||[]),wujin:new Set(obj.wujin||[]),shim:new Set(obj.shim||[])};
+}
+function isAllEmpty(){
+  return sel.sinae.size===0&&sel.wujin.size===0&&sel.shim.size===0;
+}
+
 function toggleFilter(attr, val){
-  // 같은 버튼 다시 누르면 해제
-  if(sel[attr]===val) sel[attr]=null;
-  else sel[attr]=val;
+  if(sel[attr].has(val)) sel[attr].delete(val);
+  else sel[attr].add(val);
   applyFilter();
 }
 
 function resetFilter(){
-  sel={sinae:null,wujin:null,shim:null};
+  sel={sinae:new Set(),wujin:new Set(),shim:new Set()};
   applyFilter();
 }
 
 function applyFilter(){
-  const isAll=!sel.sinae&&!sel.wujin&&!sel.shim;
+  const isAll=isAllEmpty();
 
   // 버튼 active 처리
   document.querySelectorAll('.fb2').forEach(b=>b.classList.remove('active'));
   if(isAll) document.querySelector('.btn-all').classList.add('active');
-  if(sel.sinae) document.querySelector('.btn-'+sel.sinae)?.classList.add('active');
-  if(sel.wujin) document.querySelector('.btn-'+sel.wujin)?.classList.add('active');
-  if(sel.shim)  document.querySelector('.btn-'+sel.shim)?.classList.add('active');
+  sel.sinae.forEach(v=>document.querySelector('.btn-'+v)?.classList.add('active'));
+  sel.wujin.forEach(v=>document.querySelector('.btn-'+v)?.classList.add('active'));
+  sel.shim.forEach(v=>document.querySelector('.btn-'+v)?.classList.add('active'));
 
   // 고정 버튼 pinned 표시
   document.querySelectorAll('.fb2').forEach(b=>b.classList.remove('pinned'));
   if(pinnedSel){
-    if(pinnedSel.sinae) document.querySelector('.btn-'+pinnedSel.sinae)?.classList.add('pinned');
-    if(pinnedSel.wujin) document.querySelector('.btn-'+pinnedSel.wujin)?.classList.add('pinned');
-    if(pinnedSel.shim)  document.querySelector('.btn-'+pinnedSel.shim)?.classList.add('pinned');
+    (pinnedSel.sinae||[]).forEach(v=>document.querySelector('.btn-'+v)?.classList.add('pinned'));
+    (pinnedSel.wujin||[]).forEach(v=>document.querySelector('.btn-'+v)?.classList.add('pinned'));
+    (pinnedSel.shim||[]).forEach(v=>document.querySelector('.btn-'+v)?.classList.add('pinned'));
   }
 
-  // 행 필터링 (AND 조건)
+  // 행 필터링 (AND 조건, 각 역할 내에서는 OR)
   const rows=document.querySelectorAll('.row[data-sid]');
   rows.forEach(r=>{
     let show=true;
-    if(sel.sinae && r.dataset.type!==sel.sinae) show=false;
-    if(sel.wujin && r.dataset.wujin!==sel.wujin) show=false;
-    if(sel.shim  && r.dataset.shim!==sel.shim)   show=false;
+    if(sel.sinae.size>0 && !sel.sinae.has(r.dataset.type))  show=false;
+    if(sel.wujin.size>0 && !sel.wujin.has(r.dataset.wujin)) show=false;
+    if(sel.shim.size>0  && !sel.shim.has(r.dataset.shim))   show=false;
     r.classList.toggle('hidden',!show);
   });
 
@@ -1338,10 +1346,7 @@ function applyFilter(){
 
   // 카운트 표시
   const visible=[...rows].filter(r=>!r.classList.contains('hidden')).length;
-  const parts=[];
-  if(sel.sinae) parts.push(LABELS[sel.sinae]);
-  if(sel.wujin) parts.push(LABELS[sel.wujin]);
-  if(sel.shim)  parts.push(LABELS[sel.shim]);
+  const parts=[...sel.sinae,...sel.wujin,...sel.shim].map(v=>LABELS[v]||v);
   document.getElementById('countInfo').textContent=(parts.length?parts.join(' · '):'전체')+' '+visible+'회';
 
   updateCounting();
@@ -1352,27 +1357,21 @@ function applyFilter(){
 /* ── 고정 기능 ── */
 function renderPinBar(){
   const bar=document.getElementById('pinBar');
-  const isAll=!sel.sinae&&!sel.wujin&&!sel.shim;
-  const isPinned=pinnedSel&&JSON.stringify(sel)===JSON.stringify(pinnedSel);
+  const isAll=isAllEmpty();
+  const curObj=JSON.stringify(selToObj());
+  const pinObj=pinnedSel?JSON.stringify(pinnedSel):null;
+  const isPinned=curObj===pinObj;
 
   let html='';
 
-  // 고정 상태 표시
-  if(pinnedSel&&(pinnedSel.sinae||pinnedSel.wujin||pinnedSel.shim)){
-    const parts=[];
-    if(pinnedSel.sinae) parts.push(LABELS[pinnedSel.sinae]);
-    if(pinnedSel.wujin) parts.push(LABELS[pinnedSel.wujin]);
-    if(pinnedSel.shim)  parts.push(LABELS[pinnedSel.shim]);
+  if(pinnedSel&&((pinnedSel.sinae||[]).length||(pinnedSel.wujin||[]).length||(pinnedSel.shim||[]).length)){
+    const parts=[...(pinnedSel.sinae||[]),...(pinnedSel.wujin||[]),...(pinnedSel.shim||[])].map(v=>LABELS[v]||v);
     html+=`<span class="pin-status"><span class="pin-dot"></span>📌 ${parts.join(' · ')} 고정 중</span>`;
     html+=`<button class="pin-btn pin-btn-clear" onclick="clearPin()">고정 해제</button>`;
   }
 
-  // 현재 선택이 있고 고정 상태와 다를 때 고정 버튼 표시
   if(!isAll && !isPinned){
-    const parts=[];
-    if(sel.sinae) parts.push(LABELS[sel.sinae]);
-    if(sel.wujin) parts.push(LABELS[sel.wujin]);
-    if(sel.shim)  parts.push(LABELS[sel.shim]);
+    const parts=[...sel.sinae,...sel.wujin,...sel.shim].map(v=>LABELS[v]||v);
     html+=`<button class="pin-btn pin-btn-set" onclick="setPin()">📌 ${parts.join(' · ')} 고정하기</button>`;
   }
 
@@ -1381,14 +1380,14 @@ function renderPinBar(){
 }
 
 function setPin(){
-  pinnedSel={...sel};
-  localStorage.setItem('sauichanmi_pin_v2',JSON.stringify(pinnedSel));
+  pinnedSel=selToObj();
+  localStorage.setItem('sauichanmi_pin_v3',JSON.stringify(pinnedSel));
   applyFilter();
 }
 
 function clearPin(){
   pinnedSel=null;
-  localStorage.removeItem('sauichanmi_pin_v2');
+  localStorage.removeItem('sauichanmi_pin_v3');
   applyFilter();
 }
 
@@ -1425,7 +1424,7 @@ document.querySelectorAll('.row[data-sid]').forEach(r=>{
 
 // 고정 상태 복원
 if(pinnedSel){
-  sel={sinae:pinnedSel.sinae||null,wujin:pinnedSel.wujin||null,shim:pinnedSel.shim||null};
+  sel=objToSel(pinnedSel);
 }
 applyFilter();
 </script>
