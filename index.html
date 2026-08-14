@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -84,6 +85,10 @@ body{font-family:'Noto Sans KR',sans-serif;background:linear-gradient(180deg,#b8
 .seat-input:focus{outline:none;border-color:#5ecfb8;background:white;}
 .seat-tags{display:flex;flex-wrap:wrap;gap:1px;justify-content:center;}
 .seat-tag{font-size:10px;font-weight:700;padding:2px 6px;border-radius:6px;cursor:pointer;display:inline-flex;align-items:center;gap:2px;color:white;}
+.copy-btn{background:none;border:none;outline:none;box-shadow:none;cursor:pointer;font-size:14px;padding:1px;display:flex;align-items:center;justify-content:center;width:100%;transition:all 0.15s;-webkit-appearance:none;appearance:none;}
+.copy-btn:focus{outline:none;box-shadow:none;}
+.copy-btn.copied{filter:brightness(1.3);}
+.cell.copy-cell{display:flex;align-items:center;justify-content:center;}
 
 /* 카운팅 */
 .settle-title{text-align:center;font-size:15px;font-weight:700;color:#1a3a35;letter-spacing:2px;margin:16px 0 8px;}
@@ -787,55 +792,55 @@ body{font-family:'Noto Sans KR',sans-serif;background:linear-gradient(180deg,#b8
   </div>
   <div class="no-show" data-noshow="1">8월 24일 (월) — 공연 없음</div>
   <div class="row jion-row" data-type="jion" data-sid="s92" data-wujin="seonhankook" data-shim="choiyeonwoo">
-    <div class="cell date">8월 25일</div><div class="cell day day-wkd">화</div><div class="cell time">20:00</div>
+    <div class="cell date">8월 25일<a class="event-tag" href="https://x.com/NeoGloomyday/status/2087720796395597900?s=20" target="_blank">🎟 커튼콜 위크</a></div><div class="cell day day-wkd">화</div><div class="cell time">20:00</div>
     <div class="cell">선한국</div><div class="cell">최연우</div>
     <div class="cell"><span class="sinae sinae-jion">김지온</span></div>
     <div class="cell seat-cell"><div style="display:flex;gap:2px;"><input class="seat-input" style="flex:1;min-width:0;" inputmode="text" enterkeyhint="done" autocomplete="off" autocapitalize="characters" id="inp-s92" placeholder=""><button onclick="confirmSeat('s92')" style="flex-shrink:0;background:#5ecfb8;color:white;border:none;border-radius:5px;font-size:9px;font-weight:700;padding:2px 5px;cursor:pointer;font-family:inherit;">✓</button></div><div class="seat-tags" id="tags-s92"></div></div><div class="cell copy-cell"><button class="copy-btn" onclick="copyCast('s92')" title="복사">🌊</button></div>
   </div>
   <div class="row yuhyun-row" data-type="yuhyun" data-sid="s93" data-wujin="onjuwan" data-shim="yeoeun">
-    <div class="cell date">8월 26일</div><div class="cell day day-wkd">수</div><div class="cell time">16:00</div>
+    <div class="cell date">8월 26일<a class="event-tag" href="https://x.com/NeoGloomyday/status/2087720796395597900?s=20" target="_blank">🎟 커튼콜 위크</a></div><div class="cell day day-wkd">수</div><div class="cell time">16:00</div>
     <div class="cell">온주완</div><div class="cell">여은</div>
     <div class="cell"><span class="sinae sinae-yuhyun">유현석</span></div>
     <div class="cell seat-cell"><div style="display:flex;gap:2px;"><input class="seat-input" style="flex:1;min-width:0;" inputmode="text" enterkeyhint="done" autocomplete="off" autocapitalize="characters" id="inp-s93" placeholder=""><button onclick="confirmSeat('s93')" style="flex-shrink:0;background:#5ecfb8;color:white;border:none;border-radius:5px;font-size:9px;font-weight:700;padding:2px 5px;cursor:pointer;font-family:inherit;">✓</button></div><div class="seat-tags" id="tags-s93"></div></div><div class="cell copy-cell"><button class="copy-btn" onclick="copyCast('s93')" title="복사">🌊</button></div>
   </div>
   <div class="row yuhyun-row" data-type="yuhyun" data-sid="s94" data-wujin="leejinhyuk" data-shim="jungwooyeon">
-    <div class="cell date">8월 26일</div><div class="cell day day-wkd">수</div><div class="cell time">20:00</div>
+    <div class="cell date">8월 26일<a class="event-tag" href="https://x.com/NeoGloomyday/status/2087720796395597900?s=20" target="_blank">🎟 커튼콜 위크</a></div><div class="cell day day-wkd">수</div><div class="cell time">20:00</div>
     <div class="cell">이진혁</div><div class="cell">정우연</div>
     <div class="cell"><span class="sinae sinae-yuhyun">유현석</span></div>
     <div class="cell seat-cell"><div style="display:flex;gap:2px;"><input class="seat-input" style="flex:1;min-width:0;" inputmode="text" enterkeyhint="done" autocomplete="off" autocapitalize="characters" id="inp-s94" placeholder=""><button onclick="confirmSeat('s94')" style="flex-shrink:0;background:#5ecfb8;color:white;border:none;border-radius:5px;font-size:9px;font-weight:700;padding:2px 5px;cursor:pointer;font-family:inherit;">✓</button></div><div class="seat-tags" id="tags-s94"></div></div><div class="cell copy-cell"><button class="copy-btn" onclick="copyCast('s94')" title="복사">🌊</button></div>
   </div>
   <div class="row taemin-row" data-type="taemin" data-sid="s95" data-wujin="limjunhyuk" data-shim="kimsuyeon">
-    <div class="cell date">8월 27일</div><div class="cell day day-wkd">목</div><div class="cell time">20:00</div>
+    <div class="cell date">8월 27일<a class="event-tag" href="https://x.com/NeoGloomyday/status/2087720796395597900?s=20" target="_blank">🎟 커튼콜 위크</a></div><div class="cell day day-wkd">목</div><div class="cell time">20:00</div>
     <div class="cell">임준혁</div><div class="cell">김수연</div>
     <div class="cell"><span class="sinae sinae-taemin">원태민</span></div>
     <div class="cell seat-cell"><div style="display:flex;gap:2px;"><input class="seat-input" style="flex:1;min-width:0;" inputmode="text" enterkeyhint="done" autocomplete="off" autocapitalize="characters" id="inp-s95" placeholder=""><button onclick="confirmSeat('s95')" style="flex-shrink:0;background:#5ecfb8;color:white;border:none;border-radius:5px;font-size:9px;font-weight:700;padding:2px 5px;cursor:pointer;font-family:inherit;">✓</button></div><div class="seat-tags" id="tags-s95"></div></div><div class="cell copy-cell"><button class="copy-btn" onclick="copyCast('s95')" title="복사">🌊</button></div>
   </div>
   <div class="row jion-row" data-type="jion" data-sid="s96" data-wujin="onjuwan" data-shim="jungwooyeon">
-    <div class="cell date">8월 28일</div><div class="cell day day-wkd">금</div><div class="cell time">20:00</div>
+    <div class="cell date">8월 28일<a class="event-tag" href="https://x.com/NeoGloomyday/status/2087720796395597900?s=20" target="_blank">🎟 커튼콜 위크</a></div><div class="cell day day-wkd">금</div><div class="cell time">20:00</div>
     <div class="cell">온주완</div><div class="cell">정우연</div>
     <div class="cell"><span class="sinae sinae-jion">김지온</span></div>
     <div class="cell seat-cell"><div style="display:flex;gap:2px;"><input class="seat-input" style="flex:1;min-width:0;" inputmode="text" enterkeyhint="done" autocomplete="off" autocapitalize="characters" id="inp-s96" placeholder=""><button onclick="confirmSeat('s96')" style="flex-shrink:0;background:#5ecfb8;color:white;border:none;border-radius:5px;font-size:9px;font-weight:700;padding:2px 5px;cursor:pointer;font-family:inherit;">✓</button></div><div class="seat-tags" id="tags-s96"></div></div><div class="cell copy-cell"><button class="copy-btn" onclick="copyCast('s96')" title="복사">🌊</button></div>
   </div>
   <div class="row yuhyun-row" data-type="yuhyun" data-sid="s97" data-wujin="limjunhyuk" data-shim="choiyeonwoo">
-    <div class="cell date">8월 29일</div><div class="cell day day-sat">토</div><div class="cell time">15:00</div>
+    <div class="cell date">8월 29일<a class="event-tag" href="https://x.com/NeoGloomyday/status/2087720796395597900?s=20" target="_blank">🎟 커튼콜 위크</a></div><div class="cell day day-sat">토</div><div class="cell time">15:00</div>
     <div class="cell">임준혁</div><div class="cell">최연우</div>
     <div class="cell"><span class="sinae sinae-yuhyun">유현석</span></div>
     <div class="cell seat-cell"><div style="display:flex;gap:2px;"><input class="seat-input" style="flex:1;min-width:0;" inputmode="text" enterkeyhint="done" autocomplete="off" autocapitalize="characters" id="inp-s97" placeholder=""><button onclick="confirmSeat('s97')" style="flex-shrink:0;background:#5ecfb8;color:white;border:none;border-radius:5px;font-size:9px;font-weight:700;padding:2px 5px;cursor:pointer;font-family:inherit;">✓</button></div><div class="seat-tags" id="tags-s97"></div></div><div class="cell copy-cell"><button class="copy-btn" onclick="copyCast('s97')" title="복사">🌊</button></div>
   </div>
   <div class="row jion-row" data-type="jion" data-sid="s98" data-wujin="seonhankook" data-shim="jungwooyeon">
-    <div class="cell date">8월 29일</div><div class="cell day day-sat">토</div><div class="cell time">19:00</div>
+    <div class="cell date">8월 29일<a class="event-tag" href="https://x.com/NeoGloomyday/status/2087720796395597900?s=20" target="_blank">🎟 커튼콜 위크</a></div><div class="cell day day-sat">토</div><div class="cell time">19:00</div>
     <div class="cell">선한국</div><div class="cell">정우연</div>
     <div class="cell"><span class="sinae sinae-jion">김지온</span></div>
     <div class="cell seat-cell"><div style="display:flex;gap:2px;"><input class="seat-input" style="flex:1;min-width:0;" inputmode="text" enterkeyhint="done" autocomplete="off" autocapitalize="characters" id="inp-s98" placeholder=""><button onclick="confirmSeat('s98')" style="flex-shrink:0;background:#5ecfb8;color:white;border:none;border-radius:5px;font-size:9px;font-weight:700;padding:2px 5px;cursor:pointer;font-family:inherit;">✓</button></div><div class="seat-tags" id="tags-s98"></div></div><div class="cell copy-cell"><button class="copy-btn" onclick="copyCast('s98')" title="복사">🌊</button></div>
   </div>
   <div class="row taemin-row" data-type="taemin" data-sid="s99" data-wujin="leejinhyuk" data-shim="yeoeun">
-    <div class="cell date">8월 30일</div><div class="cell day day-sun">일</div><div class="cell time">14:00</div>
+    <div class="cell date">8월 30일<a class="event-tag" href="https://x.com/NeoGloomyday/status/2087720796395597900?s=20" target="_blank">🎟 커튼콜 위크</a></div><div class="cell day day-sun">일</div><div class="cell time">14:00</div>
     <div class="cell">이진혁</div><div class="cell">여은</div>
     <div class="cell"><span class="sinae sinae-taemin">원태민</span></div>
     <div class="cell seat-cell"><div style="display:flex;gap:2px;"><input class="seat-input" style="flex:1;min-width:0;" inputmode="text" enterkeyhint="done" autocomplete="off" autocapitalize="characters" id="inp-s99" placeholder=""><button onclick="confirmSeat('s99')" style="flex-shrink:0;background:#5ecfb8;color:white;border:none;border-radius:5px;font-size:9px;font-weight:700;padding:2px 5px;cursor:pointer;font-family:inherit;">✓</button></div><div class="seat-tags" id="tags-s99"></div></div><div class="cell copy-cell"><button class="copy-btn" onclick="copyCast('s99')" title="복사">🌊</button></div>
   </div>
   <div class="row taemin-row" data-type="taemin" data-sid="s100" data-wujin="onjuwan" data-shim="kimsuyeon">
-    <div class="cell date">8월 30일</div><div class="cell day day-sun">일</div><div class="cell time">18:00</div>
+    <div class="cell date">8월 30일<a class="event-tag" href="https://x.com/NeoGloomyday/status/2087720796395597900?s=20" target="_blank">🎟 커튼콜 위크</a></div><div class="cell day day-sun">일</div><div class="cell time">18:00</div>
     <div class="cell">온주완</div><div class="cell">김수연</div>
     <div class="cell"><span class="sinae sinae-taemin">원태민</span></div>
     <div class="cell seat-cell"><div style="display:flex;gap:2px;"><input class="seat-input" style="flex:1;min-width:0;" inputmode="text" enterkeyhint="done" autocomplete="off" autocapitalize="characters" id="inp-s100" placeholder=""><button onclick="confirmSeat('s100')" style="flex-shrink:0;background:#5ecfb8;color:white;border:none;border-radius:5px;font-size:9px;font-weight:700;padding:2px 5px;cursor:pointer;font-family:inherit;">✓</button></div><div class="seat-tags" id="tags-s100"></div></div><div class="cell copy-cell"><button class="copy-btn" onclick="copyCast('s100')" title="복사">🌊</button></div>
@@ -1012,21 +1017,19 @@ function saveSeats(){localStorage.setItem('sauichanmi_seats_v3',JSON.stringify(s
 
 function updateCounting(){
   const keys=['jion','taemin','chanchan','yuhyun','seonhankook','onjuwan','leejinhyuk','limjunhyuk','jungwooyeon','yeoeun','choiyeonwoo','kimsuyeon'];
-  const cnt={};    // 내가 관람한 횟수
-  const totCnt={}; // 전체 공연 횟수 (필터 기준)
+  const cnt={};const totCnt={};
   keys.forEach(k=>{cnt[k]=0;totCnt[k]=0;});
-  let total=0, totTotal=0;
-  const isAll=!sel.sinae&&!sel.wujin&&!sel.shim;
+  let total=0,totTotal=0;
+  const isAll=isAllEmpty();
 
-  // 전체 공연 목록에서 필터에 맞는 공연의 전체 횟수 계산
   document.querySelectorAll('.row[data-sid]').forEach(r=>{
     const sid=r.dataset.sid;
     if(!SHOW_INFO[sid])return;
     const info=SHOW_INFO[sid];
     if(!isAll){
-      if(sel.sinae && info.type!==sel.sinae)return;
-      if(sel.wujin && info.wujin!==sel.wujin)return;
-      if(sel.shim  && info.shim!==sel.shim) return;
+      if(sel.sinae.size>0&&!sel.sinae.has(info.type))return;
+      if(sel.wujin.size>0&&!sel.wujin.has(info.wujin))return;
+      if(sel.shim.size>0&&!sel.shim.has(info.shim))return;
     }
     totCnt[info.type]=(totCnt[info.type]||0)+1;
     totCnt[info.wujin]=(totCnt[info.wujin]||0)+1;
@@ -1034,14 +1037,13 @@ function updateCounting(){
     totTotal++;
   });
 
-  // 내가 관람한 횟수 (필터 기준)
   Object.keys(showSeats).forEach(sid=>{
     if((showSeats[sid]||[]).length===0||!SHOW_INFO[sid])return;
     const info=SHOW_INFO[sid];
     if(!isAll){
-      if(sel.sinae && info.type!==sel.sinae)return;
-      if(sel.wujin && info.wujin!==sel.wujin)return;
-      if(sel.shim  && info.shim!==sel.shim) return;
+      if(sel.sinae.size>0&&!sel.sinae.has(info.type))return;
+      if(sel.wujin.size>0&&!sel.wujin.has(info.wujin))return;
+      if(sel.shim.size>0&&!sel.shim.has(info.shim))return;
     }
     cnt[info.type]=(cnt[info.type]||0)+1;
     cnt[info.wujin]=(cnt[info.wujin]||0)+1;
@@ -1056,30 +1058,23 @@ function updateCounting(){
   keys.forEach(k=>{
     const el=document.getElementById('cnt-'+k);if(!el)return;
     el.textContent=cnt[k]||0;
-    // 전체 횟수 업데이트
     const totEl=document.getElementById('tot-'+k);
     if(totEl)totEl.textContent='/'+(totCnt[k]||0);
     const card=el.closest('.count-card');if(!card)return;
     if(isAll){card.style.opacity='';return;}
     let relevant=false;
-    if(sel.sinae && k===sel.sinae) relevant=true;
-    if(sel.wujin && k===sel.wujin) relevant=true;
-    if(sel.shim  && k===sel.shim)  relevant=true;
-    if(!sel.sinae && sinaeKeys.includes(k)) relevant=true;
-    if(!sel.wujin && wujinKeys.includes(k)) relevant=true;
-    if(!sel.shim  && shimKeys.includes(k))  relevant=true;
+    if(sel.sinae.has(k))relevant=true;
+    if(sel.wujin.has(k))relevant=true;
+    if(sel.shim.has(k))relevant=true;
+    if(sel.sinae.size===0&&sinaeKeys.includes(k))relevant=true;
+    if(sel.wujin.size===0&&wujinKeys.includes(k))relevant=true;
+    if(sel.shim.size===0&&shimKeys.includes(k))relevant=true;
     card.style.opacity=relevant?'':'0.3';
   });
 
   document.getElementById('cnt-total').textContent=total;
   const totTotalEl=document.getElementById('tot-total');
   if(totTotalEl)totTotalEl.textContent='/'+totTotal;
-
-  // 정산 제목 업데이트
-  const parts=[];
-  if(sel.sinae)parts.push(LABELS[sel.sinae]);
-  if(sel.wujin)parts.push(LABELS[sel.wujin]);
-  if(sel.shim) parts.push(LABELS[sel.shim]);
   const titleEl=document.querySelector('.settle-title');
   if(titleEl)titleEl.textContent='✨ 2026 사의찬미 정산 ✨';
 }
@@ -1177,15 +1172,14 @@ window.addEventListener('resize',()=>{buildMap();updateMap();});
 function updateMap(){
   document.querySelectorAll('.seat').forEach(el=>el.className='seat');
   const cnt={};
-  const isAll=!sel.sinae&&!sel.wujin&&!sel.shim;
+  const isAll=isAllEmpty();
   Object.keys(showSeats).forEach(sid=>{
     if(!(showSeats[sid]||[]).length||!SHOW_INFO[sid])return;
     const info=SHOW_INFO[sid];
-    // 필터에 맞는 공연만
     if(!isAll){
-      if(sel.sinae && info.type!==sel.sinae)return;
-      if(sel.wujin && info.wujin!==sel.wujin)return;
-      if(sel.shim  && info.shim!==sel.shim) return;
+      if(sel.sinae.size>0&&!sel.sinae.has(info.type))return;
+      if(sel.wujin.size>0&&!sel.wujin.has(info.wujin))return;
+      if(sel.shim.size>0&&!sel.shim.has(info.shim))return;
     }
     showSeats[sid].forEach(s=>{cnt[s]=(cnt[s]||0)+1;});
   });
@@ -1283,49 +1277,51 @@ const LABELS={all:'전체',jion:'김지온',taemin:'원태민',chanchan:'김찬�
   jungwooyeon:'정우연',yeoeun:'여은',choiyeonwoo:'최연우',kimsuyeon:'김수연'};
 
 // 현재 선택 상태: 역할별 선택값 (null = 선택 없음)
-let sel={sinae:null, wujin:null, shim:null};
+let sel={sinae:new Set(), wujin:new Set(), shim:new Set()};
+function selToObj(){return {sinae:[...sel.sinae],wujin:[...sel.wujin],shim:[...sel.shim]};}
+function objToSel(obj){return {sinae:new Set(obj.sinae||[]),wujin:new Set(obj.wujin||[]),shim:new Set(obj.shim||[])};}
+function isAllEmpty(){return sel.sinae.size===0&&sel.wujin.size===0&&sel.shim.size===0;}
 
 // 고정된 선택 상태
 let pinnedSel=JSON.parse(localStorage.getItem('sauichanmi_pin_v2')||'null');
 
 // 역할별 같은 그룹에서 하나만 선택되도록 토글
 function toggleFilter(attr, val){
-  // 같은 버튼 다시 누르면 해제
-  if(sel[attr]===val) sel[attr]=null;
-  else sel[attr]=val;
+  if(sel[attr].has(val)) sel[attr].delete(val);
+  else sel[attr].add(val);
   applyFilter();
 }
 
 function resetFilter(){
-  sel={sinae:null,wujin:null,shim:null};
+  sel={sinae:new Set(),wujin:new Set(),shim:new Set()};
   applyFilter();
 }
 
 function applyFilter(){
-  const isAll=!sel.sinae&&!sel.wujin&&!sel.shim;
+  const isAll=isAllEmpty();
 
   // 버튼 active 처리
   document.querySelectorAll('.fb2').forEach(b=>b.classList.remove('active'));
   if(isAll) document.querySelector('.btn-all').classList.add('active');
-  if(sel.sinae) document.querySelector('.btn-'+sel.sinae)?.classList.add('active');
-  if(sel.wujin) document.querySelector('.btn-'+sel.wujin)?.classList.add('active');
-  if(sel.shim)  document.querySelector('.btn-'+sel.shim)?.classList.add('active');
+  sel.sinae.forEach(v=>document.querySelector('.btn-'+v)?.classList.add('active'));
+  sel.wujin.forEach(v=>document.querySelector('.btn-'+v)?.classList.add('active'));
+  sel.shim.forEach(v=>document.querySelector('.btn-'+v)?.classList.add('active'));
 
   // 고정 버튼 pinned 표시
   document.querySelectorAll('.fb2').forEach(b=>b.classList.remove('pinned'));
   if(pinnedSel){
-    if(pinnedSel.sinae) document.querySelector('.btn-'+pinnedSel.sinae)?.classList.add('pinned');
-    if(pinnedSel.wujin) document.querySelector('.btn-'+pinnedSel.wujin)?.classList.add('pinned');
-    if(pinnedSel.shim)  document.querySelector('.btn-'+pinnedSel.shim)?.classList.add('pinned');
+    (pinnedSel.sinae||[]).forEach(v=>document.querySelector('.btn-'+v)?.classList.add('pinned'));
+    (pinnedSel.wujin||[]).forEach(v=>document.querySelector('.btn-'+v)?.classList.add('pinned'));
+    (pinnedSel.shim||[]).forEach(v=>document.querySelector('.btn-'+v)?.classList.add('pinned'));
   }
 
   // 행 필터링 (AND 조건)
   const rows=document.querySelectorAll('.row[data-sid]');
   rows.forEach(r=>{
     let show=true;
-    if(sel.sinae && r.dataset.type!==sel.sinae) show=false;
-    if(sel.wujin && r.dataset.wujin!==sel.wujin) show=false;
-    if(sel.shim  && r.dataset.shim!==sel.shim)   show=false;
+    if(sel.sinae.size>0 && !sel.sinae.has(r.dataset.type))  show=false;
+    if(sel.wujin.size>0 && !sel.wujin.has(r.dataset.wujin)) show=false;
+    if(sel.shim.size>0  && !sel.shim.has(r.dataset.shim))   show=false;
     r.classList.toggle('hidden',!show);
   });
 
@@ -1338,10 +1334,7 @@ function applyFilter(){
 
   // 카운트 표시
   const visible=[...rows].filter(r=>!r.classList.contains('hidden')).length;
-  const parts=[];
-  if(sel.sinae) parts.push(LABELS[sel.sinae]);
-  if(sel.wujin) parts.push(LABELS[sel.wujin]);
-  if(sel.shim)  parts.push(LABELS[sel.shim]);
+  const parts=[...sel.sinae,...sel.wujin,...sel.shim].map(v=>LABELS[v]||v);
   document.getElementById('countInfo').textContent=(parts.length?parts.join(' · '):'전체')+' '+visible+'회';
 
   updateCounting();
@@ -1352,27 +1345,21 @@ function applyFilter(){
 /* ── 고정 기능 ── */
 function renderPinBar(){
   const bar=document.getElementById('pinBar');
-  const isAll=!sel.sinae&&!sel.wujin&&!sel.shim;
-  const isPinned=pinnedSel&&JSON.stringify(sel)===JSON.stringify(pinnedSel);
+  const isAll=isAllEmpty();
+  const isPinned=pinnedSel&&JSON.stringify(selToObj())===JSON.stringify(pinnedSel);
 
   let html='';
 
   // 고정 상태 표시
-  if(pinnedSel&&(pinnedSel.sinae||pinnedSel.wujin||pinnedSel.shim)){
-    const parts=[];
-    if(pinnedSel.sinae) parts.push(LABELS[pinnedSel.sinae]);
-    if(pinnedSel.wujin) parts.push(LABELS[pinnedSel.wujin]);
-    if(pinnedSel.shim)  parts.push(LABELS[pinnedSel.shim]);
+  if(pinnedSel&&((pinnedSel.sinae||[]).length||(pinnedSel.wujin||[]).length||(pinnedSel.shim||[]).length)){
+    const parts=[...(pinnedSel.sinae||[]),...(pinnedSel.wujin||[]),...(pinnedSel.shim||[])].map(v=>LABELS[v]||v);
     html+=`<span class="pin-status"><span class="pin-dot"></span>📌 ${parts.join(' · ')} 고정 중</span>`;
     html+=`<button class="pin-btn pin-btn-clear" onclick="clearPin()">고정 해제</button>`;
   }
 
   // 현재 선택이 있고 고정 상태와 다를 때 고정 버튼 표시
   if(!isAll && !isPinned){
-    const parts=[];
-    if(sel.sinae) parts.push(LABELS[sel.sinae]);
-    if(sel.wujin) parts.push(LABELS[sel.wujin]);
-    if(sel.shim)  parts.push(LABELS[sel.shim]);
+    const parts=[...sel.sinae,...sel.wujin,...sel.shim].map(v=>LABELS[v]||v);
     html+=`<button class="pin-btn pin-btn-set" onclick="setPin()">📌 ${parts.join(' · ')} 고정하기</button>`;
   }
 
@@ -1381,7 +1368,7 @@ function renderPinBar(){
 }
 
 function setPin(){
-  pinnedSel={...sel};
+  pinnedSel=selToObj();
   localStorage.setItem('sauichanmi_pin_v2',JSON.stringify(pinnedSel));
   applyFilter();
 }
@@ -1425,7 +1412,7 @@ document.querySelectorAll('.row[data-sid]').forEach(r=>{
 
 // 고정 상태 복원
 if(pinnedSel){
-  sel={sinae:pinnedSel.sinae||null,wujin:pinnedSel.wujin||null,shim:pinnedSel.shim||null};
+  sel=objToSel(pinnedSel);
 }
 applyFilter();
 </script>
