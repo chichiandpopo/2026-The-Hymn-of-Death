@@ -986,7 +986,12 @@ const COLORS=[
   {bg:'#40c060',border:'#006020',label:'5회 이상'},
 ];
 
-const showSeats=JSON.parse(localStorage.getItem('sauichanmi_seats_v3')||'{}');
+// v3 → v2 → v1 순서로 데이터 읽기 (이전 버전 호환)
+const _raw = localStorage.getItem('sauichanmi_seats_v3')
+  || localStorage.getItem('sauichanmi_seats_v2')
+  || localStorage.getItem('sauichanmi_seats')
+  || '{}';
+const showSeats=JSON.parse(_raw);
 let focusedId=null;
 
 // 각 행의 배우 정보를 DOM에서 읽어서 동적으로 구성
@@ -1007,7 +1012,9 @@ function importData(e){
     try{
       const data=JSON.parse(ev.target.result);
       Object.keys(data).forEach(sid=>{showSeats[sid]=data[sid];});
-      saveSeats();Object.keys(showSeats).forEach(sid=>renderTags(sid));updateMap();updateCounting();
+      saveSeats();
+      Object.keys(showSeats).forEach(sid=>renderTags(sid));
+      applyFilter();
       alert('데이터를 불러왔어요! 🎉');
     }catch(e){alert('파일을 읽을 수 없어요 ㅠㅠ');}
   };
@@ -1170,7 +1177,10 @@ function buildMap(){
 window.addEventListener('resize',()=>{buildMap();updateMap();});
 
 function updateMap(){
-  document.querySelectorAll('.seat').forEach(el=>el.className='seat');
+  // className만 'seat'으로 리셋 (인라인 스타일은 유지)
+  document.querySelectorAll('.seat').forEach(el=>{
+    el.className='seat';
+  });
   const cnt={};
   const isAll=isAllEmpty();
   Object.keys(showSeats).forEach(sid=>{
@@ -1386,19 +1396,13 @@ document.querySelectorAll('.seat-input').forEach(inp=>{
 
 buildMap();
 Object.keys(showSeats).forEach(sid=>renderTags(sid));
-updateMap();updateCounting();
 
 // 김우진·윤심덕 배우 이름에 배지 적용
 const WUJIN_BADGE={seonhankook:'badge-seonhankook',onjuwan:'badge-onjuwan',leejinhyuk:'badge-leejinhyuk',limjunhyuk:'badge-limjunhyuk'};
 const SHIM_BADGE ={jungwooyeon:'badge-jungwooyeon',yeoeun:'badge-yeoeun',choiyeonwoo:'badge-choiyeonwoo',kimsuyeon:'badge-kimsuyeon'};
 document.querySelectorAll('.row[data-sid]').forEach(r=>{
-  const cells=r.querySelectorAll('.cell:not(.date):not(.time):not(.seat-cell)');
-  // cells[0]=요일, cells[1]=김우진, cells[2]=윤심덕 (day 클래스 제외하고)
-  // data 속성으로 정확히 접근
   const wk=r.dataset.wujin, sk=r.dataset.shim;
-  // 김우진 셀 = 4번째 .cell (date/day/time/wujin/shim/sinae 순)
   const allCells=r.querySelectorAll('.cell');
-  // allCells: [date, day, time, wujin, shim, sinae, seat-cell]
   const wujinCell=allCells[3], shimCell=allCells[4];
   if(wujinCell && WUJIN_BADGE[wk]){
     const txt=wujinCell.innerHTML;
@@ -1410,7 +1414,8 @@ document.querySelectorAll('.row[data-sid]').forEach(r=>{
   }
 });
 
-// 고정 상태 복원
+// SHOW_INFO는 applyFilter 전에 이미 구성됨 (script 상단에서 DOM 기반으로 읽음)
+// 고정 상태 복원 후 applyFilter
 if(pinnedSel){
   sel=objToSel(pinnedSel);
 }
