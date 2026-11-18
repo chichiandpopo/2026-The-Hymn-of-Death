@@ -140,19 +140,14 @@ body{font-family:'Noto Sans KR',sans-serif;background:linear-gradient(180deg,#b8
 .jpair-ticket-side.sinae{background:linear-gradient(90deg,#c0004a,#e05080);}
 .jpair-ticket-side.wujin{background:linear-gradient(90deg,#3a7abc,#6aa0dc);}
 .jpair-ticket-side.shim{background:linear-gradient(90deg,#7a4a9a,#aa70ca);}
-/* 카운터 영역 */
-.jpair-ticket-right{display:flex;flex-direction:column;align-items:center;padding:8px 6px 4px;background:rgba(240,252,250,0.6);}
-.jpair-ticket-cnt{font-size:28px;font-weight:900;color:#1a7a60;line-height:1;font-variant-numeric:tabular-nums;}
-.jpair-ticket-cnt-unit{font-size:7px;color:#6a9a90;letter-spacing:1px;font-weight:600;margin-top:1px;}
-/* 점선 구분선 */
-.jpair-ticket-tear{width:calc(100% - 16px);height:1px;margin:5px 8px;background:repeating-linear-gradient(to right,rgba(100,180,165,0.4) 0px,rgba(100,180,165,0.4) 4px,transparent 4px,transparent 8px);}
-/* 이름 영역 */
-.jpair-ticket-left{padding:4px 8px 8px;display:flex;flex-direction:column;gap:2px;}
-.jpair-ticket-label{font-size:6.5px;color:rgba(94,207,184,0.8);letter-spacing:1.5px;font-weight:700;text-transform:uppercase;margin-bottom:2px;}
-.jpair-ticket-names{display:flex;flex-direction:column;gap:1px;}
-.jpair-ticket-name{font-size:9.5px;font-weight:700;color:#1a3a35;line-height:1.3;display:flex;align-items:center;gap:3px;}
-.jpair-ticket-name span{font-size:7px;font-weight:400;color:#6a9a90;letter-spacing:0.5px;}
-.jpair-ticket-best{position:absolute;top:8px;right:6px;font-size:6.5px;font-weight:700;color:#c0004a;letter-spacing:0.5px;}
+/* 이름+회수 영역 */
+.jpair-ticket-left{padding:8px 8px 9px;display:flex;flex-direction:column;gap:4px;}
+.jpair-ticket-label{font-size:6.5px;color:rgba(94,207,184,0.8);letter-spacing:1.5px;font-weight:700;text-transform:uppercase;margin-bottom:1px;}
+.jpair-ticket-names{display:flex;flex-direction:column;gap:3px;}
+.jpair-ticket-name{font-size:9.5px;font-weight:700;color:#1a3a35;line-height:1;display:flex;align-items:center;justify-content:space-between;gap:3px;}
+.jpair-ticket-name span.role{font-size:7px;font-weight:400;color:#6a9a90;letter-spacing:0.5px;flex-shrink:0;}
+.jpair-ticket-cnt-inline{font-size:11px;font-weight:800;color:#1a7a60;}
+.jpair-ticket-cnt-unit{font-size:7px;color:#6a9a90;font-weight:400;}
 .jno-data{text-align:center;padding:20px;color:#6a9a90;font-size:12px;grid-column:1/-1;width:100%;}
 .stage-box{background:#ddd;border-radius:6px;text-align:center;font-size:11px;font-weight:700;color:#666;padding:5px 0;letter-spacing:3px;margin-bottom:4px;width:100%;}
 .seat-map-inner{display:block;width:100%;}
@@ -1265,20 +1260,18 @@ function updateJPairs(){
     ticket.className='jpair-ticket'+(isTop?' top':'');
     ticket.innerHTML=
       '<div class="jpair-ticket-side '+sideClass+'"></div>'+
-      '<div class="jpair-ticket-right">'+
-        '<div class="jpair-ticket-cnt">'+p.cnt+'</div>'+
-        '<div class="jpair-ticket-cnt-unit">회 관람</div>'+
-      '</div>'+
-      '<div class="jpair-ticket-tear"></div>'+
       '<div class="jpair-ticket-left">'+
         '<div class="jpair-ticket-label">CAST</div>'+
         '<div class="jpair-ticket-names">'+
-          '<div class="jpair-ticket-name">'+p.sn+'<span>사내</span></div>'+
-          '<div class="jpair-ticket-name">'+p.wn+'<span>우진</span></div>'+
-          '<div class="jpair-ticket-name">'+p.shn+'<span>심덕</span></div>'+
+          '<div class="jpair-ticket-name"><span>'+p.sn+'</span><span class="role">사내</span></div>'+
+          '<div class="jpair-ticket-name"><span>'+p.wn+'</span><span class="role">우진</span></div>'+
+          '<div class="jpair-ticket-name"><span>'+p.shn+'</span><span class="role">심덕</span></div>'+
         '</div>'+
-      '</div>'+
-      '';
+        '<div style="display:flex;align-items:baseline;gap:2px;margin-top:5px;padding-top:5px;border-top:1px dashed rgba(100,180,165,0.3);">'+
+          '<span class="jpair-ticket-cnt-inline">'+p.cnt+'</span>'+
+          '<span class="jpair-ticket-cnt-unit">회 관람</span>'+
+        '</div>'+
+      '</div>';
     grid.appendChild(ticket);
   });
 }
