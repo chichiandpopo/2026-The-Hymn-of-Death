@@ -208,6 +208,9 @@ body{font-family:'Noto Sans KR',sans-serif;background:linear-gradient(180deg,#b8
 
 
 
+
+.jtoast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#1a3a35;color:#e8f8f4;font-size:12px;font-weight:600;padding:10px 20px;border-radius:99px;opacity:0;transition:all 0.3s;pointer-events:none;z-index:9999;white-space:nowrap;}
+.jtoast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 </style>
 </head>
 <body>
@@ -1157,8 +1160,8 @@ function importData(e){
       const data=JSON.parse(ev.target.result);
       Object.keys(data).forEach(sid=>{showSeats[sid]=data[sid];});
       saveSeats();Object.keys(showSeats).forEach(sid=>renderTags(sid));updateMap();updateCounting();
-      alert('데이터를 불러왔어요! 🎉');
-    }catch(e){alert('파일을 읽을 수 없어요 ㅠㅠ');}
+      showToast('✓ 데이터를 불러왔어요! 🎉');
+    }catch(e){showToast('파일을 읽을 수 없어요 ㅠㅠ');}
   };
   reader.readAsText(file);e.target.value='';
 }
@@ -1296,37 +1299,41 @@ function saveAsImage(){
   btn.disabled=true;
 
   const wrap=document.querySelector('.jeongsan-wrap');
-  if(!wrap){alert('정산 영역을 찾을 수 없어요!');btn.textContent=origText;btn.disabled=false;return;}
+  if(!wrap){showToast('정산 영역을 찾을 수 없어요 ㅠㅠ');btn.textContent=origText;btn.disabled=false;return;}
 
-  // 외부 래퍼: 배경 + 패딩 추가
+  // 원본을 직접 캡처 (clone 대신) — base64 이미지 렌더링 보장
+  const origBg=document.body.style.background;
+  // 임시 패딩 래퍼를 원본 wrap 바깥에 삽입
   const outer=document.createElement('div');
-  outer.style.cssText='position:fixed;left:-9999px;top:0;background:linear-gradient(180deg,#b8e8e0 0%,#d4f0eb 30%,#e8f8f5 60%,#c8e8e8 100%);padding:24px 20px 28px;width:'+(wrap.offsetWidth+40)+'px;box-sizing:border-box;';
-  const clone=wrap.cloneNode(true);
-  // 클론에서 버튼류 제거
-  clone.querySelectorAll('button,input,label').forEach(el=>el.remove());
-  outer.appendChild(clone);
-  document.body.appendChild(outer);
+  outer.style.cssText='background:linear-gradient(180deg,#b8e8e0 0%,#d4f0eb 30%,#e8f8f5 60%,#c8e8e8 100%);padding:24px 20px 28px;display:inline-block;';
+  wrap.parentNode.insertBefore(outer,wrap);
+  outer.appendChild(wrap);
 
   html2canvas(outer,{
     scale:2,
     useCORS:true,
-    backgroundColor:null,
-    logging:false,
     allowTaint:true,
+    backgroundColor:'#b8e8e0',
+    logging:false,
+    imageTimeout:0,
   }).then(canvas=>{
-    document.body.removeChild(outer);
+    // wrap 원위치
+    outer.parentNode.insertBefore(wrap,outer);
+    outer.parentNode.removeChild(outer);
     const link=document.createElement('a');
     link.download='사의찬미_정산.jpg';
     link.href=canvas.toDataURL('image/jpeg',0.95);
     link.click();
     btn.textContent=origText;
     btn.disabled=false;
+    showToast('✓ 저장됐어요!');
   }).catch(err=>{
-    if(document.body.contains(outer))document.body.removeChild(outer);
+    // wrap 원위치
+    if(outer.parentNode){outer.parentNode.insertBefore(wrap,outer);outer.parentNode.removeChild(outer);}
     console.error(err);
     btn.textContent=origText;
     btn.disabled=false;
-    alert('저장 중 오류가 발생했어요 ㅠㅠ');
+    showToast('저장 중 오류가 발생했어요 ㅠㅠ');
   });
 }
 
@@ -1630,5 +1637,14 @@ applyFilter();
 
 </script>
 
+
+<div class="jtoast" id="jtoast"></div>
+<script>
+function showToast(msg){
+  const t=document.getElementById('jtoast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+</script>
 </body>
 </html>
