@@ -1309,6 +1309,14 @@ function saveAsImage(){
   wrap.parentNode.insertBefore(outer,wrap);
   outer.appendChild(wrap);
 
+  // filter 속성 일시 제거 (html2canvas 호환)
+  const filtered=outer.querySelectorAll('*');
+  const savedFilters=[];
+  filtered.forEach(el=>{
+    const f=el.style.filter||getComputedStyle(el).filter;
+    if(f&&f!=='none'){savedFilters.push({el,f});el.style.filter='none';}
+  });
+
   html2canvas(outer,{
     scale:2,
     useCORS:true,
@@ -1317,6 +1325,8 @@ function saveAsImage(){
     logging:false,
     imageTimeout:0,
   }).then(canvas=>{
+    // filter 복원
+    savedFilters.forEach(({el,f})=>el.style.filter=f);
     // wrap 원위치
     outer.parentNode.insertBefore(wrap,outer);
     outer.parentNode.removeChild(outer);
@@ -1328,6 +1338,8 @@ function saveAsImage(){
     btn.disabled=false;
     showToast('✓ 저장됐어요!');
   }).catch(err=>{
+    // filter 복원
+    savedFilters.forEach(({el,f})=>el.style.filter=f);
     // wrap 원위치
     if(outer.parentNode){outer.parentNode.insertBefore(wrap,outer);outer.parentNode.removeChild(outer);}
     console.error(err);
