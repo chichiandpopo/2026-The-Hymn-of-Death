@@ -128,18 +128,24 @@ body{font-family:'Noto Sans KR',sans-serif;background:linear-gradient(180deg,#b8
 .jactor-name{font-size:10px;font-weight:700;color:#1a3a35;margin-bottom:2px;}
 .jactor-cnt{font-size:16px;font-weight:700;color:#1a7a60;line-height:1;}
 .jactor-denom{font-size:10px;color:#6a9a90;font-weight:400;}
-.jactor-badge{position:absolute;top:5px;right:5px;background:rgba(94,207,184,0.92);color:#fff;font-size:9px;font-weight:700;padding:2px 5px;border-radius:99px;line-height:1.3;}
+.jactor-badge{display:none!important;}
 .jseat-map-wrap{background:rgba(255,255,255,0.85);border-radius:16px;padding:14px 8px 16px;border:1px solid rgba(100,180,165,0.3);}
-.jpair-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;}
+.jpair-section-label{font-size:11px;font-weight:700;color:#4a7a70;letter-spacing:2px;margin:16px 0 8px;text-align:center;}
+.jpair-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;}
 @media(max-width:400px){.jpair-grid{grid-template-columns:1fr 1fr;}}
-.jpair-card{background:rgba(255,255,255,0.82);border:1px solid rgba(100,180,165,0.25);border-radius:14px;padding:12px 10px;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;transition:all 0.15s;}
-.jpair-card.top{border-color:rgba(94,207,184,0.7);background:linear-gradient(135deg,rgba(94,207,184,0.15),rgba(255,255,255,0.9));box-shadow:0 2px 10px rgba(94,207,184,0.2);}
-.jpair-cnt{font-size:28px;font-weight:700;color:#1a7a60;line-height:1;}
-.jpair-cnt-label{font-size:8px;color:#4a7a70;letter-spacing:1px;margin-bottom:4px;}
-.jpair-divider{width:30px;height:1px;background:rgba(100,180,165,0.3);margin:3px 0;}
-.jpair-names{font-size:9.5px;color:#2a5a50;line-height:1.7;min-width:0;}
-.jpair-name-role{font-size:8px;color:#6a9a90;letter-spacing:0.5px;}
-.jno-data{text-align:center;padding:16px;color:#6a9a90;font-size:11px;}
+.jpair-card{background:rgba(255,255,255,0.88);border:1.5px solid rgba(100,180,165,0.2);border-radius:16px;padding:14px 10px 12px;display:flex;flex-direction:column;align-items:center;gap:0;text-align:center;transition:all 0.2s;box-shadow:0 1px 6px rgba(0,0,0,0.04);}
+.jpair-card.top{border-color:rgba(94,207,184,0.75);background:linear-gradient(160deg,rgba(94,207,184,0.12) 0%,rgba(255,255,255,0.95) 60%);box-shadow:0 3px 14px rgba(94,207,184,0.22);}
+.jpair-rank{font-size:9px;font-weight:700;color:#5ecfb8;letter-spacing:1px;margin-bottom:6px;}
+.jpair-cnt{font-size:36px;font-weight:800;color:#1a7a60;line-height:1;margin-bottom:2px;}
+.jpair-cnt-unit{font-size:11px;color:#6a9a90;margin-bottom:8px;}
+.jpair-divider{width:28px;height:1.5px;background:linear-gradient(90deg,transparent,rgba(100,180,165,0.5),transparent);margin:0 auto 8px;}
+.jpair-name-row{display:flex;align-items:center;gap:5px;margin-bottom:3px;width:100%;}
+.jpair-role-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.jpair-role-dot.sinae{background:#c0004a;}
+.jpair-role-dot.wujin{background:#3a7abc;}
+.jpair-role-dot.shim{background:#7a4a9a;}
+.jpair-name{font-size:10px;color:#1a3a35;font-weight:600;text-align:left;}
+.jno-data{text-align:center;padding:20px;color:#6a9a90;font-size:12px;}
 .stage-box{background:#ddd;border-radius:6px;text-align:center;font-size:11px;font-weight:700;color:#666;padding:5px 0;letter-spacing:3px;margin-bottom:4px;width:100%;}
 .seat-map-inner{display:block;width:100%;}
 .seat-row{display:flex;align-items:center;margin-bottom:1px;gap:1px;width:100%;}
@@ -1233,10 +1239,18 @@ function updateJPairs(){
     return;
   }
   const maxc=pairs[0].cnt;
-  pairs.forEach(p=>{
+  pairs.forEach((p,i)=>{
     const card=document.createElement('div');
     card.className='jpair-card'+(p.cnt===maxc?' top':'');
-    card.innerHTML='<div class="jpair-names">'+p.sn+'<br>'+p.wn+'<br>'+p.shn+'</div><div class="jpair-cnt">'+p.cnt+'</div>';
+    const rankLabel=p.cnt===maxc?'✦ BEST':'';
+    card.innerHTML=
+      (rankLabel?'<div class="jpair-rank">'+rankLabel+'</div>':'')+
+      '<div class="jpair-cnt">'+p.cnt+'</div>'+
+      '<div class="jpair-cnt-unit">회 관람</div>'+
+      '<div class="jpair-divider"></div>'+
+      '<div class="jpair-name-row"><span class="jpair-role-dot sinae"></span><span class="jpair-name">'+p.sn+'</span></div>'+
+      '<div class="jpair-name-row"><span class="jpair-role-dot wujin"></span><span class="jpair-name">'+p.wn+'</span></div>'+
+      '<div class="jpair-name-row"><span class="jpair-role-dot shim"></span><span class="jpair-name">'+p.shn+'</span></div>';
     grid.appendChild(card);
   });
 }
