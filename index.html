@@ -108,9 +108,15 @@ body{font-family:'Noto Sans KR',sans-serif;background:linear-gradient(180deg,#b8
 .seat-map-title{text-align:center;font-size:13px;font-weight:700;color:#1a5a4a;margin-bottom:8px;letter-spacing:1px;}
 /* ===== 새 정산판 ===== */
 .jeongsan-wrap{max-width:680px;margin:0 auto;}
-.jeongsan-title-row{display:flex;align-items:center;justify-content:center;gap:8px;margin:20px 0 14px;font-size:15px;font-weight:700;color:#1a3a35;letter-spacing:2px;}
-.jeongsan-wave{color:rgba(100,180,165,0.5);font-size:12px;}
-.jeongsan-title-text{color:#1a3a35;}
+.jeongsan-title-block{text-align:center;margin:22px 0 16px;line-height:1;}
+.jeongsan-musical-label{font-size:9px;font-weight:700;letter-spacing:4px;color:rgba(94,207,184,0.75);text-transform:uppercase;margin-bottom:5px;}
+.jeongsan-title-main{font-size:30px;font-weight:900;color:#0d2e28;letter-spacing:3px;line-height:1.1;font-family:'Apple SD Gothic Neo','Noto Serif KR',serif;text-shadow:0 1px 0 rgba(255,255,255,0.4);}
+.jeongsan-title-sub{font-size:9px;color:#4a8a7a;letter-spacing:1.5px;margin-top:6px;display:flex;align-items:center;justify-content:center;gap:6px;}
+.jeongsan-title-sub::before,.jeongsan-title-sub::after{content:"";display:inline-block;width:24px;height:1px;background:rgba(94,207,184,0.45);}
+.jeongsan-title-deco{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:7px;}
+.jeongsan-title-line{flex:1;max-width:60px;height:1px;background:linear-gradient(90deg,transparent,rgba(94,207,184,0.5));}
+.jeongsan-title-line.r{background:linear-gradient(90deg,rgba(94,207,184,0.5),transparent);}
+.jeongsan-title-diamond{width:5px;height:5px;background:rgba(94,207,184,0.6);transform:rotate(45deg);}
 .jtotal-wrap{text-align:center;margin-bottom:16px;}
 .jtotal-pill{display:inline-block;background:rgba(100,180,165,0.15);border:1.5px solid rgba(100,180,165,0.4);border-radius:999px;padding:8px 36px;}
 .jtotal-num{font-size:30px;font-weight:700;color:#1a7a60;line-height:1;}
@@ -941,10 +947,16 @@ body{font-family:'Noto Sans KR',sans-serif;background:linear-gradient(180deg,#b8
 
 <!-- 정산판 -->
 <div class="jeongsan-wrap">
-  <div class="jeongsan-title-row">
-    <span class="jeongsan-wave">〰</span>
-    <span class="jeongsan-title-text">🌊 2026 사의찬미 정산</span>
-    <span class="jeongsan-wave">〰</span>
+  <div class="jeongsan-title-block">
+    <div class="jeongsan-musical-label">M U S I C A L</div>
+    <div class="jeongsan-title-main">사의찬미</div>
+    <div class="jeongsan-title-deco">
+      <div class="jeongsan-title-line"></div>
+      <div class="jeongsan-title-diamond"></div>
+      <div class="jeongsan-title-line r"></div>
+    </div>
+    <div class="jeongsan-title-sub">2026 · Gloomy Day</div>
+    <div class="jeongsan-title-sub" style="margin-top:4px;">2026.06.16 ~ 2026.09.06 &nbsp;|&nbsp; 링크아트센터 페이코홀</div>
   </div>
 
   <div class="jtotal-wrap">
@@ -1082,6 +1094,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:linear-gradient(180deg,#b8
 
 <div style="max-width:680px;margin:10px auto 4px;display:flex;gap:6px;justify-content:center;flex-wrap:wrap;">
   <button onclick="exportData()" style="padding:5px 14px;background:rgba(255,255,255,0.7);border:1px solid rgba(100,180,165,0.5);border-radius:20px;font-size:11px;font-weight:700;color:#1a5a4a;cursor:pointer;font-family:inherit;">💾 내 데이터 저장</button>
+  <button class="save-btn" onclick="saveAsImage()" style="padding:5px 14px;background:rgba(255,255,255,0.7);border:1px solid rgba(100,180,165,0.5);border-radius:20px;font-size:11px;font-weight:700;color:#1a5a4a;cursor:pointer;font-family:inherit;">📸 내 정산판 저장</button>
   <label style="padding:5px 14px;background:rgba(255,255,255,0.7);border:1px solid rgba(100,180,165,0.5);border-radius:20px;font-size:11px;font-weight:700;color:#1a5a4a;cursor:pointer;">
     📂 데이터 불러오기<input type="file" accept=".json" onchange="importData(event)" style="display:none;">
   </label>
@@ -1277,38 +1290,31 @@ function updateJPairs(){
 }
 
 function saveAsImage(){
-  // 정산 영역: settle-title부터 seat-map-section까지 감싸는 wrapper 생성
-  const settle=document.querySelector('.settle-title');
-  const seatMap=document.querySelector('.seat-map-section');
-  if(!settle||!seatMap){alert('정산 영역을 찾을 수 없어요!');return;}
-
   const btn=document.querySelector('.save-btn');
   const origText=btn.textContent;
   btn.textContent='⏳ 저장 중...';
   btn.disabled=true;
 
-  // 임시 wrapper로 캡처할 영역 감싸기
-  const wrapper=document.createElement('div');
-  wrapper.style.cssText='background:linear-gradient(180deg,#b8e8e0 0%,#d4f0eb 30%,#e8f8f5 60%,#c8e8e8 100%);padding:20px 16px 24px;display:inline-block;min-width:320px;';
+  const wrap=document.querySelector('.jeongsan-wrap');
+  if(!wrap){alert('정산 영역을 찾을 수 없어요!');btn.textContent=origText;btn.disabled=false;return;}
 
-  // settle-title ~ seat-map-section 사이 노드들 복제
-  const clone=document.createElement('div');
-  let node=settle;
-  while(node){
-    clone.appendChild(node.cloneNode(true));
-    if(node===seatMap) break;
-    node=node.nextElementSibling;
-  }
-  wrapper.appendChild(clone);
-  document.body.appendChild(wrapper);
+  // 외부 래퍼: 배경 + 패딩 추가
+  const outer=document.createElement('div');
+  outer.style.cssText='position:fixed;left:-9999px;top:0;background:linear-gradient(180deg,#b8e8e0 0%,#d4f0eb 30%,#e8f8f5 60%,#c8e8e8 100%);padding:24px 20px 28px;width:'+(wrap.offsetWidth+40)+'px;box-sizing:border-box;';
+  const clone=wrap.cloneNode(true);
+  // 클론에서 버튼류 제거
+  clone.querySelectorAll('button,input,label').forEach(el=>el.remove());
+  outer.appendChild(clone);
+  document.body.appendChild(outer);
 
-  html2canvas(wrapper,{
+  html2canvas(outer,{
     scale:2,
     useCORS:true,
     backgroundColor:null,
     logging:false,
+    allowTaint:true,
   }).then(canvas=>{
-    document.body.removeChild(wrapper);
+    document.body.removeChild(outer);
     const link=document.createElement('a');
     link.download='사의찬미_정산.jpg';
     link.href=canvas.toDataURL('image/jpeg',0.95);
@@ -1316,7 +1322,7 @@ function saveAsImage(){
     btn.textContent=origText;
     btn.disabled=false;
   }).catch(err=>{
-    document.body.removeChild(wrapper);
+    if(document.body.contains(outer))document.body.removeChild(outer);
     console.error(err);
     btn.textContent=origText;
     btn.disabled=false;
