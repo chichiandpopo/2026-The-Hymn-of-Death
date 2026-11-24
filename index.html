@@ -212,6 +212,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:linear-gradient(180deg,#b8
 .jtoast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#1a3a35;color:#e8f8f4;font-size:12px;font-weight:600;padding:10px 20px;border-radius:99px;opacity:0;transition:all 0.3s;pointer-events:none;z-index:9999;white-space:nowrap;}
 .jtoast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 </style>
+<link rel="stylesheet" href="notices/archive.css">
 </head>
 <body>
 
@@ -230,6 +231,10 @@ body{font-family:'Noto Sans KR',sans-serif;background:linear-gradient(180deg,#b8
   <a href="https://musicalseeya.com/seeyaplay/62/1261" target="_blank" class="info-btn">🔍 시야 확인</a>
 </div>
 
+
+<nav class="np-tabs np-root" id="np-tabs" data-np="hymn" aria-label="보기 선택"></nav>
+<div id="np" class="np-root np-pad" data-np="hymn" data-account="NeoGloomyday" hidden></div>
+<div class="np-main">
 <div class="section-title">출연 일정</div>
 
 <div class="pin-bar" id="pinBar">
@@ -1103,6 +1108,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:linear-gradient(180deg,#b8
   </label>
   <a href="https://chichiandpopo.github.io/stage_archive/" target="_blank" style="padding:5px 14px;background:rgba(255,255,255,0.7);border:1px solid rgba(100,180,165,0.5);border-radius:20px;font-size:11px;font-weight:700;color:#1a5a4a;text-decoration:none;">🎭 관극 아카이브</a>
 </div>
+</div><!-- /np-main -->
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
@@ -1714,5 +1720,6 @@ function showToast(msg){
   setTimeout(()=>t.classList.remove('show'),2800);
 }
 </script>
+<script src="notices/archive.js" defer></script>
 </body>
 </html>
