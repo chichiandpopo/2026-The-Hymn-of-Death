@@ -134,7 +134,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:linear-gradient(180deg,#b8
 @media(max-width:420px){.jactor-grid{grid-template-columns:repeat(2,1fr);}}
 .jactor-card{background:rgba(255,255,255,0.8);border:1px solid rgba(100,180,165,0.3);border-radius:12px;overflow:hidden;position:relative;transition:all 0.2s;}
 .jactor-card.has-seen{border-color:rgba(94,207,184,0.7);box-shadow:0 2px 8px rgba(94,207,184,0.2);}
-.jactor-card.zero{opacity:0.45;filter:grayscale(0.5);}
+
 .jactor-photo{width:100%;aspect-ratio:3/4;object-fit:cover;object-position:top center;display:block;}
 .jactor-info{padding:6px 4px 5px;text-align:center;background:rgba(255,255,255,0.92);}
 .jactor-name{font-size:10px;font-weight:700;color:#1a3a35;margin-bottom:2px;}
@@ -217,6 +217,21 @@ body{font-family:'Noto Sans KR',sans-serif;background:linear-gradient(180deg,#b8
 
 .jtoast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#1a3a35;color:#e8f8f4;font-size:12px;font-weight:600;padding:10px 20px;border-radius:99px;opacity:0;transition:all 0.3s;pointer-events:none;z-index:9999;white-space:nowrap;}
 .jtoast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* 페어 정산 (티켓형) */
+.sp-list{max-width:440px;margin:0 auto;display:grid;gap:7px;}
+.sp-cell{position:relative;display:flex;align-items:stretch;overflow:hidden;border:1.2px solid rgba(94,190,170,.75);background:#ffffff;border-radius:4px;}
+.sp-body{flex:1;min-width:0;display:flex;align-items:center;justify-content:center;gap:8px;padding:6px 8px;}
+.sp-p{text-align:left;font-size:13.5px;min-width:3.15em;}
+.sp-p small{display:block;font-size:6.5px;font-weight:800;letter-spacing:1.4px;color:#5aa596;margin-bottom:2px;font-family:'Noto Sans KR',sans-serif;white-space:nowrap;}
+.sp-p span{font-family:'Nanum Myeongjo',serif;font-weight:800;font-size:13.5px;color:#1a3a35;white-space:nowrap;}
+.sp-dia{display:block;width:4px;height:4px;background:#d0406e;transform:rotate(45deg);flex-shrink:0;margin-top:9px;}
+.sp-stub{position:relative;flex:0 0 56px;display:flex;flex-direction:column;align-items:center;justify-content:center;border-left:1.5px dashed rgba(94,190,170,.75);background:#e2f4ef;padding:4px 0;}
+.sp-stub::before,.sp-stub::after{content:'';position:absolute;left:-5px;width:8px;height:8px;border-radius:50%;background:#cdeee7;border:1px solid rgba(94,190,170,.75);}
+.sp-stub::before{top:-5px;}.sp-stub::after{bottom:-5px;}
+.sp-num{font-family:'Nanum Myeongjo',serif;font-style:italic;font-weight:800;font-size:21px;line-height:1;color:#1a7a60;}
+.sp-tot{margin-top:1px;font-size:9px;font-weight:700;color:#5a8f84;letter-spacing:.5px;}
+@media(max-width:380px){.sp-p{font-size:12.5px}.sp-p span{font-size:12.5px}.sp-body{gap:6px}.sp-stub{flex-basis:50px}}
 </style>
 <link rel="stylesheet" href="notices/archive.css">
 <script>/* 정산판 저장: 화면을 축소하면 얇은 선이 0px이 되어 이미지 저장이 실패하던 문제 방지 */
@@ -1100,10 +1115,8 @@ P.createPattern=function(img,rep){if(img&&('width' in img)&&(!img.width||!img.he
   </div>
 
   <!-- 페어 카운팅 -->
-  <div class="jrole-label" style="margin-top:16px;">페어 카운팅</div>
-  <div class="jpair-grid" id="jpair-grid">
-    <div class="jno-data">아직 관람 기록이 없어요 🌊</div>
-  </div>
+  <div class="jrole-label" id="pairHead" style="margin-top:16px;display:none">페어</div>
+  <div class="sp-list" id="jpair-grid" style="display:none"></div>
 
 </div>
 
@@ -1283,60 +1296,27 @@ function updateCounting(){
 }
 
 function updateJPairs(){
-  const JNAME={jion:'김지온',taemin:'원태민',chanchan:'김찬종',yuhyun:'유현석',
-    seonhankook:'선한국',onjuwan:'온주완',leejinhyuk:'이진혁',limjunhyuk:'임준혁',
-    jungwooyeon:'정우연',yeoeun:'여은',choiyeonwoo:'최연우',kimsuyeon:'김수연'};
-  const pairMap={};
-  Object.keys(showSeats).forEach(sid=>{
-    if((showSeats[sid]||[]).length===0||!SHOW_INFO[sid])return;
-    const info=SHOW_INFO[sid];
-    const pk=info.type+'_'+info.wujin+'_'+info.shim;
-    pairMap[pk]=(pairMap[pk]||0)+1;
-  });
-  const pairs=Object.keys(pairMap).map(pk=>{
-    const p=pk.split('_');
-    return{key:pk,sn:JNAME[p[0]],wn:JNAME[p[1]],shn:JNAME[p[2]],cnt:pairMap[pk]};
-  }).sort((a,b)=>b.cnt-a.cnt);
-  const grid=document.getElementById('jpair-grid');
-  if(!grid)return;
-  grid.innerHTML='';
-  if(pairs.length===0){
-    grid.innerHTML='<div class="jno-data">아직 관람 기록이 없어요 🌊</div>';
-    return;
-  }
-  const maxc=pairs[0].cnt;
-  // 사내 역할 판별
-  const SINAE=['jion','taemin','chanchan','yuhyun'];
-  const WUJIN=['seonhankook','onjuwan','leejinhyuk','limjunhyuk'];
-  const JKEY={jion:'jion',taemin:'taemin',chanchan:'chanchan',yuhyun:'yuhyun',
-    seonhankook:'seonhankook',onjuwan:'onjuwan',leejinhyuk:'leejinhyuk',limjunhyuk:'limjunhyuk',
-    jungwooyeon:'jungwooyeon',yeoeun:'yeoeun',choiyeonwoo:'choiyeonwoo',kimsuyeon:'kimsuyeon'};
-  const RNAME={jion:'사내',taemin:'사내',chanchan:'사내',yuhyun:'사내',
-    seonhankook:'김우진',onjuwan:'김우진',leejinhyuk:'김우진',limjunhyuk:'김우진',
-    jungwooyeon:'윤심덕',yeoeun:'윤심덕',choiyeonwoo:'윤심덕',kimsuyeon:'윤심덕'};
-  pairs.forEach((p,i)=>{
-    const isTop=p.cnt===maxc;
-    // 사내 key 역추적
-    const snKey=Object.keys(JKEY).find(k=>JNAME[k]===p.sn)||'jion';
-    const sideClass=SINAE.includes(snKey)?'sinae':WUJIN.includes(snKey)?'wujin':'shim';
-    const ticket=document.createElement('div');
-    ticket.className='jpair-ticket'+(isTop?' top':'');
-    ticket.innerHTML=
-      '<div class="jpair-ticket-side '+sideClass+'"></div>'+
-      '<div class="jpair-ticket-left">'+
-        '<div class="jpair-ticket-label">CAST</div>'+
-        '<div class="jpair-ticket-names">'+
-          '<div class="jpair-ticket-name"><span>'+p.sn+'</span><span class="role">사내</span></div>'+
-          '<div class="jpair-ticket-name"><span>'+p.wn+'</span><span class="role">우진</span></div>'+
-          '<div class="jpair-ticket-name"><span>'+p.shn+'</span><span class="role">심덕</span></div>'+
-        '</div>'+
-        '<div style="display:flex;align-items:baseline;gap:2px;margin-top:5px;padding-top:5px;border-top:1px dashed rgba(100,180,165,0.3);">'+
-          '<span class="jpair-ticket-cnt-inline">'+p.cnt+'</span>'+
-          '<span class="jpair-ticket-cnt-unit">회 관람</span>'+
-        '</div>'+
-      '</div>';
-    grid.appendChild(ticket);
-  });
+  const one=(set,v)=>set.size!==1||set.has(v);
+  renderPairs(i=>one(sel.sinae,i.type)&&one(sel.wujin,i.wujin)&&one(sel.shim,i.shim));
+}
+/* ================= PAIR (페어 정산) ================= */
+function renderPairs(match){
+  const R=[['type','사내'],['wujin','김우진'],['shim','윤심덕']];
+  const NM={jion:'김지온',taemin:'원태민',chanchan:'김찬종',yuhyun:'유현석',seonhankook:'선한국',onjuwan:'온주완',leejinhyuk:'이진혁',limjunhyuk:'임준혁',jungwooyeon:'정우연',yeoeun:'여은',choiyeonwoo:'최연우',kimsuyeon:'김수연'};
+  const c={},t={};
+  document.querySelectorAll('.row[data-sid]').forEach(r=>{const i=SHOW_INFO[r.dataset.sid];if(!i||!match(i))return;
+    if(R.some(x=>!NM[i[x[0]]]))return;const k=R.map(x=>i[x[0]]).join('|');t[k]=(t[k]||0)+1;});
+  Object.keys(showSeats).forEach(sid=>{const i=SHOW_INFO[sid];if(!i||!(showSeats[sid]||[]).length||!match(i))return;
+    const k=R.map(x=>i[x[0]]).join('|');if(k in t)c[k]=(c[k]||0)+1;});
+  const ORD=[['jion','taemin','chanchan','yuhyun'],['seonhankook','onjuwan','leejinhyuk','limjunhyuk'],['jungwooyeon','yeoeun','choiyeonwoo','kimsuyeon']];
+  const ok=k=>k.split('|').map((x,j)=>{const n=(ORD[j]||[]).indexOf(x);return String(n<0?99:n).padStart(2,'0')}).join('');
+  const keys=Object.keys(c).sort((a,b)=>(c[b]-c[a])||(ok(a)<ok(b)?-1:1));
+  const list=document.getElementById('jpair-grid'),head=document.getElementById('pairHead');
+  if(!list)return;
+  list.innerHTML=keys.map(k=>{const p=k.split('|');
+    return '<div class="sp-cell"><div class="sp-body">'+p.map((a,j)=>(j?'<i class="sp-dia"></i>':'')+'<div class="sp-p"><small>'+R[j][1]+'</small><span>'+NM[a]+'</span></div>').join('')+
+      '</div><div class="sp-stub"><div class="sp-num">'+c[k]+'</div><div class="sp-tot">/'+t[k]+'</div></div></div>';}).join('');
+  list.style.display=keys.length?'':'none';if(head)head.style.display=keys.length?'':'none';
 }
 
 function saveAsImage(){
